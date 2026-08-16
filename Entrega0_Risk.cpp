@@ -40,51 +40,17 @@ vector <Comandos> almacenamiento= {
                                      "El archivo debería contener la información descrita en el comando guardar. "
                                      "El comando debe poder inicializar el juego desde un archivo de juego normal o un archivo binario con los "
                                      "datos comprimidos.", 1,1}};
-vector <Comandos> estrategias;
+vector <Comandos> estrategias = {
+    {"Costo conquista [Nombre jugador] [Territorio]", "Se calcula el costo y la secuencia de territorios a ser conquistados" 
+                                                      "para lograr controlar el territorio dado por el jugador acutal. El territorio desde donde" 
+                                                      "debe atacar debe ser aquel que el jugador tenga controlado más cerca al dado por el jugador. ",1,1},
+    {"Conquista mas barata [Nombre jugador]", "De todos los territorios posibles, el programa calcula aquel que pueda implicar un menor número de unidades"
+                                              "de ejército perdidas. Esta información se analiza desde el punto de vista del jugador [Nombre jugador actual].", 1,1}};
 
 vector <vector <Comandos>> categorias = {config, almacenamiento, estrategias};
 
 int main(){
 
 
-    int elegir = -1;
-
-    do {
-        cout<<"###############-COMANDOS-###############"<<endl;
-        cout<<"CONFIG JUEGO"<<endl;
-        cout<<"1. inicializar"<<endl;
-        cout<<"2. obtener_unidades"<<endl;
-        cout<<"3. atacar"<<endl;
-        cout<<"4. foritficar"<<endl;
-        cout<<"5. estado_juego"<<endl;
-        cout<<"0. salir"<<endl;
-        cout<<"ALMACENAMIENTO"<<endl;
-        cout<<"6. guardar"<<endl;
-        cout<<"7. guardar_comprimido"<<endl;
-        cout<<"8. inicializar"<<endl;
-        cout<<"ESTRATEGIAS DE JUEGO"<<endl;
-        cout<<"9. costo_conquista"<<endl;
-        cout<<"10. conquista_mas_barata"<<endl;
-
-
-        cin>>elegir;
-        switch (elegir){
-            case '1':
-                cout<<"===============Inicializar==============="<<endl;
-                cout<<"Inicializa el juego a partir de la información contenida en el archivo .txt,"<<endl;
-                cout<<"dejando la interfaz del juego lista para recibir los turnos de cada jugador"<<endl;
-            break;
-            case '2':
-                cout<<"===============Obtener Unidades==============="<<endl;
-                cout<<" *Informa cuantas unidades adicionales puede reclamar el jugador"<<endl;
-                cout<<" *Donde asignar las  unidades y cuantas desea en cada territorio" <<endl;
-            break;
-
-
-
-        }
-
-    }while(elegir!= 0);
-    elegir = -1;
 
 }
