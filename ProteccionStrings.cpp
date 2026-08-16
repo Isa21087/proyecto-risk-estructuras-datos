@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 
+//Alejo
 struct DatosComando { //Para la informacion de tendra cada comando  
     string nombre; //nombre del comando 
     int minArgs; //cantidad minima de argumentos que recibe el comando
@@ -73,6 +74,8 @@ int buscarComando(string nombre) {
     return -1;
 }
 
+//Isa agragó
+//A partir de la posicion del comando en la tabla, valida si la cantidad de parametros que se le paso al comando es correcta, si es correcta devuelve true, si no es correcta devuelve false y muestra un mensaje de error
 bool validarCantidadParametros(int posicion, int cantidad) {
 
     if (cantidad < TABLA_COMANDOS[posicion].minArgs || cantidad > TABLA_COMANDOS[posicion].maxArgs) {
@@ -85,6 +88,7 @@ bool validarCantidadParametros(int posicion, int cantidad) {
     return true;
 }
 
+//Alejo
 bool validarComando(string nombre, int cantidadArgumentos) {
 
     int posicion = buscarComando(nombre);
