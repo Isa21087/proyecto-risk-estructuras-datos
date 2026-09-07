@@ -58,6 +58,16 @@ void Territorio::agregarVecino(string codigoVecino) {
     codigosVecinos.push_back(codigoVecino);
 }
 
+bool Territorio::esVecino(string codigoTerritorio) const{
+    vector<string>::const_iterator buscar = codigosVecinos.begin();
+    for(; buscar != codigosVecinos.end(); ++buscar){
+        if(*buscar == codigoTerritorio){
+            return true;
+        }
+    }
+    return false;
+}
+
 // Retorna la lista completa de vecinos, sin permitir modificarla.
 const vector<string>& Territorio::obtenerVecinos() const {
     return codigosVecinos;
