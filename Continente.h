@@ -21,11 +21,9 @@ public:
     string obtenerCodigo() const;
     string obtenerNombre() const;
     int obtenerBonificacion() const;
-    void agregarTerritorio(Territorio territorio);
     void agregarTerritorio(const Territorio& territorio);
     const vector<Territorio>& obtenerTerritorios() const;
     bool estaControladoPor(string colorJugador) const;
-    Territorio* buscarTerritorio(string codigo);
     const Territorio* buscarTerritorio(string codigo) const;
 };
 #endif

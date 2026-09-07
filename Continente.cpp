@@ -26,9 +26,6 @@ string Continente::obtenerNombre() const{
 int Continente::obtenerBonificacion() const{
     return bonificacion;
 }
-void Continente::agregarTerritorio(Territorio territorio){
-    territorios.push_back(territorio);
-}
 
 void Continente::agregarTerritorio(const Territorio& territorio){
     territorios.push_back(territorio);
@@ -38,6 +35,7 @@ const vector<Territorio>& Continente::obtenerTerritorios() const{
     return territorios;
 }
 
+//Busca si un continente es unicamente de un jugador
 bool Continente::estaControladoPor(string colorJugador) const{
     
     if(territorios.empty()){
@@ -53,21 +51,13 @@ bool Continente::estaControladoPor(string colorJugador) const{
     return true;
 }
 
-    Territorio* Continente::buscarTerritorio(string codigo){
-        vector<Territorio>::iterator buscar = territorios.begin();
-        for(; buscar != territorios.end(); ++buscar){
-            if(buscar->obtenerCodigo() == codigo){
-                return &(*buscar);
-            }
+//Busca segun el codigo un territorio  
+const Territorio* Continente::buscarTerritorio(string codigo) const{
+    vector<Territorio>::const_iterator buscar = territorios.begin();
+    for(; buscar != territorios.end(); ++buscar){
+        if(buscar ->obtenerCodigo() == codigo){
+            return &(*buscar);
         }
-        return NULL;
     }
-    const Territorio* Continente::buscarTerritorio(string codigo) const{
-        vector<Territorio>::const_iterator buscar = territorios.begin();
-        for(; buscar != territorios.end(); ++buscar){
-            if(buscar ->obtenerCodigo() == codigo){
-                return &(*buscar);
-            }
-        }
-        return NULL;
+   return NULL;
     }

@@ -58,6 +58,7 @@ void Territorio::agregarVecino(string codigoVecino) {
     codigosVecinos.push_back(codigoVecino);
 }
 
+//Busca el codigo del vecino en el vecto de codigoVecino
 bool Territorio::esVecino(string codigoTerritorio) const{
     vector<string>::const_iterator buscar = codigosVecinos.begin();
     for(; buscar != codigosVecinos.end(); ++buscar){
@@ -76,36 +77,39 @@ const vector<string>& Territorio::obtenerVecinos() const {
 bool Territorio::agregarUnidades(int cantidad){
 
 
-    if(cantidad <=0){
+    if(cantidad <=0){   //Se necesita que la cantidad que se vaya a agregar sea mayor a 0
         return false;
     }
-    unidades+=cantidad;
+    unidades+=cantidad; 
     return true;
 }
 
 bool Territorio::retirarUnidades(int cantidad, int minimoRestante){
 
-    if(cantidad <= 0 ){
+    if(cantidad <= 0 ){ //Se necesita que la cantidad que se vaya a retirar sea mayor a 0
         return false;
     }
-    if(unidades - cantidad < minimoRestante){
-        return false;
+    //se tiene un minimo el cual se debe cumplir para que no hayan errores
+    if(unidades - cantidad < minimoRestante){   //deben haber mas unidades que la cantidad minima puesta
+        return false;                           
     }
     unidades-=cantidad;
     return true;
 }
 
 bool Territorio::cambiarPropietario(string color, int cantidadAnadir){
-    
+    //se verifica que ya no hayan unidades en el territorio
     if(unidades != 0){
         return false;
     }
 
+    //Se debe añadir al menos una unidad en este territorio
     if(cantidadAnadir <= 0 ){
         return false;
     }
 
-        colorPropietario=color;
+    //Se añade la unidad y se corona este territorio como conquistado
+    colorPropietario=color;
 
     agregarUnidades(cantidadAnadir);
     return true;
