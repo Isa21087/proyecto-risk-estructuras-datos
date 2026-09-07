@@ -84,6 +84,10 @@ bool Territorio::agregarUnidades(int cantidad){
 }
 
 bool Territorio::retirarUnidades(int cantidad, int minimoRestante){
+
+    if(cantidad <= 0 ){
+        return false;
+    }
     if(unidades - cantidad < minimoRestante){
         return false;
     }
@@ -97,11 +101,11 @@ bool Territorio::cambiarPropietario(string color, int cantidadAnadir){
         return false;
     }
 
-    colorPropietario=color;
-    
     if(cantidadAnadir <= 0 ){
         return false;
     }
+
+        colorPropietario=color;
 
     agregarUnidades(cantidadAnadir);
     return true;

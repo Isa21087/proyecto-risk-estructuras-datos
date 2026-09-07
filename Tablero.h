@@ -11,7 +11,7 @@ private:
 public:
     Tablero();
     void inicializarEstructura();
- 
+    const Territorio* buscarTerritorio(string codigo) const;
     bool existeTerritorio(string codigo) const;
     bool configurarTerritorio(
         string codigo,

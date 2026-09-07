@@ -30,7 +30,6 @@ public:
     void agregarVecino(string codigoVecino);
     bool esVecino(string codigoTerritorio) const;
     const vector<string>& obtenerVecinos() const;
-    void print() const;
     bool cambiarPropietario(string color, int cantidad);
 };
 #endif
