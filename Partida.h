@@ -26,8 +26,6 @@ public:
     EstadoComando atacar(string nombreJugador);
     EstadoComando fortificar(string nombreJugador);
     EstadoComando validarEstadoJuego() const;
-    Jugador* buscarJugador(string nombreJugador);
-    const Jugador* buscarJugador(string nombreJugador) const;
     int buscarPosicionJugador(string nombreJugador) const;
     bool comprobarGanador();
     void mostrarEstadoJuego() const;
