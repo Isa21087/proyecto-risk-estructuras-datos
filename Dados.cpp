@@ -1,7 +1,7 @@
 #include "Dados.h"
-// Para usar rand() y srand()
+// Para usar rand() se utiliza para generar números aleatorios y srand() se utiliza para inicializar el valor semilla del generador de números aleatorios. 
 #include <cstdlib>
-// Para usar la hora del sistema como semilla
+// Para usar la hora del sistema como semilla. Convierte un valor time_t en una representación local de fecha y hora
 #include <ctime>
 using namespace std;
 
