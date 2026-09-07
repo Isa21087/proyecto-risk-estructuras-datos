@@ -7,13 +7,11 @@
 using namespace std;
 class Tablero {
 private:
-    vector<Territorio> territorios;
     vector<Continente> continentes;
 public:
     Tablero();
     void inicializarEstructura();
-    Territorio* buscarTerritorio(string codigo);
-    const Territorio* buscarTerritorio(string codigo) const;
+ 
     bool existeTerritorio(string codigo) const;
     bool configurarTerritorio(
         string codigo,

@@ -23,6 +23,8 @@ public:
     int obtenerBonificacion() const;
     void agregarTerritorio(Territorio territorio);
     const vector<Territorio>& obtenerTerritorios() const;
-    bool estaControladoPor(string colorJugador, const Tablero& tablero) const;
+    bool estaControladoPor(string colorJugador) const;
+    Territorio* buscarTerritorio(string codigo);
+    const Territorio* buscarTerritorio(string codigo) const;
 };
 #endif

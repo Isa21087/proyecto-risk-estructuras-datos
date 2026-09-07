@@ -33,6 +33,32 @@ void Continente::agregarTerritorio(Territorio territorio){
 const vector<Territorio>& Continente::obtenerTerritorios() const{
     return territorios;
 }
-bool Continente::estaControladoPor(string colorJugador, const Tablero& tablero) const{
-    
+
+bool Continente::estaControladoPor(string colorJugador) const{
+    vector<Territorio>::const_iterator buscarPropietario = territorios.begin();
+    for(; buscarPropietario != territorios.end() ; ++buscarPropietario){
+        if(buscarPropietario->obtenerColorPropietario() != colorJugador){// Verifica si en este continente hay mas de un jugador
+            return false;
+        }
+    }
+    return true;
 }
+
+    Territorio* Continente::buscarTerritorio(string codigo){
+        vector<Territorio>::iterator buscar = territorios.begin();
+        for(; buscar != territorios.end(); ++buscar){
+            if(buscar->obtenerCodigo() == codigo){
+                return &(*buscar);
+            }
+        }
+        return NULL;
+    }
+    const Territorio* Continente::buscarTerritorio(string codigo) const{
+        vector<Territorio>::const_iterator buscar = territorios.begin();
+        for(; buscar != territorios.end(); ++buscar){
+            if(buscar ->obtenerCodigo() == codigo){
+                return &(*buscar);
+            }
+        }
+        return NULL;
+    }
