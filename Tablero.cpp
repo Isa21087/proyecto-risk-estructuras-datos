@@ -6,6 +6,7 @@ Tablero::Tablero()
 }
 
 void Tablero::inicializarEstructura() { //crea el tablero de juego
+    continentes.clear();//inicializa todo slos continentes vacios
     // ===== Continentes =====
     Continente americaDelNorte("1", "America del Norte", 5);
     Continente americaDelSur("2", "America del Sur", 2);
@@ -177,7 +178,7 @@ Territorio* Tablero::buscarTerritorio(string codigo){
      vector<Continente>::iterator buscar = continentes.begin();
      for(; buscar != continentes.end();++buscar){ //Se busca dentro del vector de continentes
         Territorio* territorio = buscar->buscarTerritorio(codigo);
-        if(buscar->buscarTerritorio(codigo)){ // como el iterador es de tipo continente puede buscar un territorio
+        if(territorio != NULL){ // como el iterador es de tipo continente puede buscar un territorio
             return territorio; //retorna el territrio buscado
         }
      }
@@ -188,7 +189,7 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
      vector<Continente>::const_iterator buscar = continentes.begin();
      for(; buscar != continentes.end();++buscar){ //Se busca dentro del vector de continentes
         const Territorio* territorio = buscar->buscarTerritorio(codigo);
-        if(buscar->buscarTerritorio(codigo)){ // como el iterador es de tipo continente puede buscar un territorio
+        if(territorio != NULL){ // como el iterador es de tipo continente puede buscar un territorio
             return territorio; //retorna el territrio buscado
         }
      }
