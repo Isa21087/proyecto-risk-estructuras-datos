@@ -103,8 +103,8 @@ bool Territorio::cambiarPropietario(string color, int cantidadAnadir){
         return false;
     }
 
-    //Se debe añadir al menos una unidad en este territorio
-    if(cantidadAnadir <= 0 ){
+    //Se puede añadir una unidad en este territorio
+    if(cantidadAnadir < 0 ){
         return false;
     }
 
