@@ -24,6 +24,7 @@ public:
     void agregarTerritorio(const Territorio& territorio);
     const vector<Territorio>& obtenerTerritorios() const;
     bool estaControladoPor(string colorJugador) const;
+    Territorio* buscarTerritorio(string codigo);
     const Territorio* buscarTerritorio(string codigo) const;
 };
 #endif

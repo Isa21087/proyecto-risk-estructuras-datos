@@ -51,7 +51,17 @@ bool Continente::estaControladoPor(string colorJugador) const{
     return true;
 }
 
-//Busca segun el codigo un territorio  
+//Busca segun el codigo un territorio
+Territorio* Continente::buscarTerritorio(string codigo){
+    vector<Territorio>::iterator buscar = territorios.begin();
+    for(; buscar != territorios.end(); ++buscar){
+        if(buscar ->obtenerCodigo() == codigo){
+            return &(*buscar);
+        }
+    }
+   return NULL;
+}
+
 const Territorio* Continente::buscarTerritorio(string codigo) const{
     vector<Territorio>::const_iterator buscar = territorios.begin();
     for(; buscar != territorios.end(); ++buscar){
@@ -60,4 +70,4 @@ const Territorio* Continente::buscarTerritorio(string codigo) const{
         }
     }
    return NULL;
-    }
+}

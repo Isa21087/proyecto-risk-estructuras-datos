@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Tablero.h"
 
 Tablero::Tablero()
@@ -172,6 +173,17 @@ void Tablero::inicializarEstructura() { //crea el tablero de juego
     continentes.push_back(oceania);
 }
 
+Territorio* Tablero::buscarTerritorio(string codigo){
+     vector<Continente>::iterator buscar = continentes.begin();
+     for(; buscar != continentes.end();++buscar){ //Se busca dentro del vector de continentes
+        Territorio* territorio = buscar->buscarTerritorio(codigo);
+        if(buscar->buscarTerritorio(codigo)){ // como el iterador es de tipo continente puede buscar un territorio
+            return territorio; //retorna el territrio buscado
+        }
+     }
+     return NULL;
+}
+
 const Territorio* Tablero::buscarTerritorio(string codigo) const{
      vector<Continente>::const_iterator buscar = continentes.begin();
      for(; buscar != continentes.end();++buscar){ //Se busca dentro del vector de continentes
@@ -192,7 +204,18 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
         return true;
     }
 
-    //bool configurarTerritorio(string codigo, string colorPropietario, int unidades){}
+    //inicializa los territorios al inicio del juego / da los territorios iniciales para cada jugador
+    bool Tablero::configurarTerritorio(string codigo, string colorPropietario, int unidades){
+        
+        if(!buscarTerritorio(codigo)){//valida que exista el territorio
+            return false;
+        }
+        Territorio* territorio = buscarTerritorio(codigo);//crea un territorio
+
+        territorio->asignarPropietario(colorPropietario);//le asigna un propietario al territorio
+        territorio->asignarUnidades(unidades);//le asigna unidades al territorio
+        return true;
+    }
 
     bool Tablero::sonVecinos(string codigoOrigen, string codigoDestino) const{
         if(!existeTerritorio(codigoOrigen)){//verifica si existe el territorio del que se va a comparar
@@ -245,4 +268,125 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
         }
         //devuelve la cantidad total de unidades que tiene el jugador en todo el tablero
         return unds;    
+    }
+
+    int Tablero::calcularBonificacionContinentes(string colorJugador) const{
+        //Entra dentro de cada uno de los continentes
+        vector<Continente>::const_iterator buscar = continentes.begin();
+        for(; buscar != continentes.end() ; ++buscar){
+            if(buscar->estaControladoPor(colorJugador)){
+                return buscar->obtenerBonificacion();
+            }
+
+        }
+        return -1;
+    }
+        
+    bool Tablero::agregarUnidades(string codigoTerritorio, string colorJugador, int cantidad){
+        if(!existeTerritorio(codigoTerritorio)){
+            return false;
+        }
+
+        Territorio* territorio = buscarTerritorio(codigoTerritorio);
+        if(territorio->obtenerColorPropietario()!=colorJugador){
+            return false;
+        }
+
+        return territorio->agregarUnidades(cantidad);
+    }
+
+    bool Tablero::trasladarUnidades(string codigoOrigen, string codigoDestino, string colorJugador, int cantidad, int minimoRestante){
+        if(!existeTerritorio(codigoOrigen)){
+            return false;
+        }
+
+        Territorio* terr1 = buscarTerritorio(codigoOrigen);
+
+        if(!existeTerritorio(codigoDestino)){
+            return false;
+        }
+
+        Territorio* terr2 = buscarTerritorio(codigoDestino);
+
+        if(terr1->obtenerColorPropietario()!=colorJugador){
+            return false;
+        }
+
+        if(!terr1->esVecino(codigoDestino)){
+            return false;
+        }
+        if(!terr1->retirarUnidades(cantidad,minimoRestante)){
+            return false;
+        }
+        terr1->retirarUnidades(cantidad, minimoRestante);
+
+        if(!terr2->retirarUnidades(cantidad, minimoRestante)){
+            return false;
+        }
+        terr2->agregarUnidades(cantidad);
+
+        return true;
+
+    }
+
+    bool Tablero::cambiarPropietario(string codigoTerritorio, string nuevoColor, int cantidad){
+        if(!existeTerritorio(codigoTerritorio)){
+            return false;
+        }
+
+        Territorio* territorio = buscarTerritorio(codigoTerritorio);
+        if(territorio->obtenerColorPropietario() == nuevoColor){
+            return false;
+        }
+
+        if(!territorio->cambiarPropietario(nuevoColor, cantidad)){
+            return false;
+        }
+        
+        return territorio->cambiarPropietario(nuevoColor, cantidad);
+        
+        
+    }
+    //Verifica que todos los continentes al inicir el juego tengan su correspondiente color en caso contrario devuelve false
+    bool Tablero::todosLosTerritoriosConfigurados() const{
+        vector<Continente>::const_iterator buscar = continentes.begin();
+        for(; buscar != continentes.end(); ++buscar){//Busca entre todos los continentes que hay
+            //Crea un alias del vector territorio de continente para que no se duplique de manera local haciendolo mas eficiente
+            const vector<Territorio>& territorios = buscar->obtenerTerritorios();
+            vector<Territorio>::const_iterator buscarTerr = territorios.begin();
+            //Busca que todos los territorios del continente tengan un color propietario, en caso contrario que devuelva un false
+            for(; buscarTerr != territorios.end(); ++buscarTerr){
+                if(buscarTerr->obtenerColorPropietario() == ""){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    void Tablero::mostrarTablero() const {
+        vector<Continente>::const_iterator buscar = continentes.begin();
+        cout << "========== TABLERO =========="<<endl;
+        while (buscar != continentes.end()) {
+
+            cout << "Continente: "<< buscar->obtenerNombre() << endl;
+
+            const vector<Territorio>& territorios = buscar->obtenerTerritorios();
+
+            vector<Territorio>::const_iterator buscarTerritorio = territorios.begin();
+
+            while (buscarTerritorio != territorios.end()) {
+
+                cout << "  Territorio: "<< buscarTerritorio->obtenerNombre()<< endl;
+
+                cout << "    Codigo: "<< buscarTerritorio->obtenerCodigo() << endl;
+
+                cout << "    Propietario: " << buscarTerritorio->obtenerColorPropietario() << endl;
+
+                cout << "    Unidades: "<< buscarTerritorio->obtenerUnidades() << endl;
+
+                ++buscarTerritorio;
+            }
+            ++buscar;
+        }
     }
