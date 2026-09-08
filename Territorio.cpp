@@ -104,15 +104,14 @@ bool Territorio::cambiarPropietario(string color, int cantidadAnadir){
     }
 
     //Se puede añadir una unidad en este territorio
-    if(cantidadAnadir < 0 ){
+    if(cantidadAnadir <= 0 ){
         return false;
     }
 
     //Se añade la unidad y se corona este territorio como conquistado
     colorPropietario=color;
-    if(cantidadAnadir > 0){
-        agregarUnidades(cantidadAnadir);
-    }
+    
+    agregarUnidades(cantidadAnadir);
     
     return true;
 }
