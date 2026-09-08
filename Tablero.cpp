@@ -31,10 +31,10 @@ void Tablero::inicializarEstructura() { //crea el tablero de juego
     t1_3.agregarVecino("1.4"); t1_3.agregarVecino("1.9"); t1_3.agregarVecino("2.4");
     t1_4.agregarVecino("1.7"); t1_4.agregarVecino("1.8"); t1_4.agregarVecino("1.9"); t1_4.agregarVecino("1.3");
     t1_5.agregarVecino("1.6"); t1_5.agregarVecino("1.7"); t1_5.agregarVecino("1.8"); t1_5.agregarVecino("3.2");
-    t1_6.agregarVecino("1.1"); t1_6.agregarVecino("1.2"); t1_6.agregarVecino("1.5"); t1_6.agregarVecino("1.7"); t1_6.agregarVecino("1.9");
+    t1_6.agregarVecino("1.1"); t1_6.agregarVecino("1.2"); t1_6.agregarVecino("1.5"); t1_6.agregarVecino("1.7");
     t1_7.agregarVecino("1.2"); t1_7.agregarVecino("1.6"); t1_7.agregarVecino("1.5"); t1_7.agregarVecino("1.8"); t1_7.agregarVecino("1.4"); t1_7.agregarVecino("1.9");
     t1_8.agregarVecino("1.5"); t1_8.agregarVecino("1.7"); t1_8.agregarVecino("1.4");
-    t1_9.agregarVecino("1.2"); t1_9.agregarVecino("1.6"); t1_9.agregarVecino("1.7"); t1_9.agregarVecino("1.4"); t1_9.agregarVecino("1.3");
+    t1_9.agregarVecino("1.2"); t1_9.agregarVecino("1.7"); t1_9.agregarVecino("1.4"); t1_9.agregarVecino("1.3");
 
     americaDelNorte.agregarTerritorio(t1_1);
     americaDelNorte.agregarTerritorio(t1_2);
@@ -75,9 +75,9 @@ void Tablero::inicializarEstructura() { //crea el tablero de juego
     t3_2.agregarVecino("1.5"); t3_2.agregarVecino("3.1"); t3_2.agregarVecino("3.4");
     t3_3.agregarVecino("3.1"); t3_3.agregarVecino("3.4"); t3_3.agregarVecino("3.6"); t3_3.agregarVecino("3.5"); t3_3.agregarVecino("3.7");
     t3_4.agregarVecino("3.2"); t3_4.agregarVecino("3.1"); t3_4.agregarVecino("3.3"); t3_4.agregarVecino("3.6");
-    t3_5.agregarVecino("3.7"); t3_5.agregarVecino("3.3"); t3_5.agregarVecino("3.6"); t3_5.agregarVecino("4.3"); t3_5.agregarVecino("5.7");
+    t3_5.agregarVecino("3.7"); t3_5.agregarVecino("3.3"); t3_5.agregarVecino("3.6"); t3_5.agregarVecino("4.3"); t3_5.agregarVecino("4.5");  t3_5.agregarVecino("5.7");
     t3_6.agregarVecino("3.4"); t3_6.agregarVecino("3.3"); t3_6.agregarVecino("3.5"); t3_6.agregarVecino("5.7"); t3_6.agregarVecino("5.11"); t3_6.agregarVecino("5.1");
-    t3_7.agregarVecino("3.1"); t3_7.agregarVecino("3.3"); t3_7.agregarVecino("3.5"); t3_7.agregarVecino("4.3"); t3_7.agregarVecino("4.5");
+    t3_7.agregarVecino("3.1"); t3_7.agregarVecino("3.3"); t3_7.agregarVecino("3.5"); t3_7.agregarVecino("4.5");
 
     europa.agregarTerritorio(t3_1);
     europa.agregarTerritorio(t3_2);
@@ -97,9 +97,9 @@ void Tablero::inicializarEstructura() { //crea el tablero de juego
 
     t4_1.agregarVecino("4.2"); t4_1.agregarVecino("4.5"); t4_1.agregarVecino("4.6");
     t4_2.agregarVecino("4.3"); t4_2.agregarVecino("4.1"); t4_2.agregarVecino("4.5"); t4_2.agregarVecino("4.6"); t4_2.agregarVecino("4.4"); t4_2.agregarVecino("5.7");
-    t4_3.agregarVecino("3.5"); t4_3.agregarVecino("3.7"); t4_3.agregarVecino("4.5"); t4_3.agregarVecino("4.2"); t4_3.agregarVecino("5.7");
+    t4_3.agregarVecino("3.5"); t4_3.agregarVecino("4.5"); t4_3.agregarVecino("4.2"); t4_3.agregarVecino("5.7");
     t4_4.agregarVecino("4.2"); t4_4.agregarVecino("4.6");
-    t4_5.agregarVecino("2.2"); t4_5.agregarVecino("3.7"); t4_5.agregarVecino("4.3"); t4_5.agregarVecino("4.1"); t4_5.agregarVecino("4.2");
+    t4_5.agregarVecino("2.2"); t4_5.agregarVecino("3.5"); t4_5.agregarVecino("3.7"); t4_5.agregarVecino("4.3"); t4_5.agregarVecino("4.1"); t4_5.agregarVecino("4.2");
     t4_6.agregarVecino("4.1"); t4_6.agregarVecino("4.2"); t4_6.agregarVecino("4.4");
 
     africa.agregarTerritorio(t4_1);
@@ -132,9 +132,9 @@ void Tablero::inicializarEstructura() { //crea el tablero de juego
     t5_7.agregarVecino("3.5"); t5_7.agregarVecino("3.6"); t5_7.agregarVecino("4.3"); t5_7.agregarVecino("4.2"); t5_7.agregarVecino("5.1"); t5_7.agregarVecino("5.3");
     t5_8.agregarVecino("5.10"); t5_8.agregarVecino("5.4"); t5_8.agregarVecino("5.6"); t5_8.agregarVecino("5.5"); t5_8.agregarVecino("5.2");
     t5_9.agregarVecino("5.3"); t5_9.agregarVecino("5.2"); t5_9.agregarVecino("6.2");
-    t5_10.agregarVecino("5.11"); t5_10.agregarVecino("5.4"); t5_10.agregarVecino("5.8"); t5_10.agregarVecino("5.2");
+    t5_10.agregarVecino("5.11"); t5_10.agregarVecino("5.4"); t5_10.agregarVecino("5.8"); t5_10.agregarVecino("5.2"); t5_10.agregarVecino("5.12");
     t5_11.agregarVecino("3.6"); t5_11.agregarVecino("5.1"); t5_11.agregarVecino("5.2"); t5_11.agregarVecino("5.10");
-    t5_12.agregarVecino("5.4"); t5_12.agregarVecino("5.6");
+    t5_12.agregarVecino("5.4"); t5_12.agregarVecino("5.6"); t5_12.agregarVecino("5.10");
 
     asia.agregarTerritorio(t5_1);
     asia.agregarTerritorio(t5_2);
