@@ -75,7 +75,7 @@ void Tablero::inicializarEstructura() { //crea el tablero de juego
     t3_2.agregarVecino("1.5"); t3_2.agregarVecino("3.1"); t3_2.agregarVecino("3.4");
     t3_3.agregarVecino("3.1"); t3_3.agregarVecino("3.4"); t3_3.agregarVecino("3.6"); t3_3.agregarVecino("3.5"); t3_3.agregarVecino("3.7");
     t3_4.agregarVecino("3.2"); t3_4.agregarVecino("3.1"); t3_4.agregarVecino("3.3"); t3_4.agregarVecino("3.6");
-    t3_5.agregarVecino("3.7"); t3_5.agregarVecino("3.3"); t3_5.agregarVecino("3.6"); t3_5.agregarVecino("4.3"); t3_5.agregarVecino("4.2"); t3_5.agregarVecino("5.7");
+    t3_5.agregarVecino("3.7"); t3_5.agregarVecino("3.3"); t3_5.agregarVecino("3.6"); t3_5.agregarVecino("4.3"); t3_5.agregarVecino("5.7");
     t3_6.agregarVecino("3.4"); t3_6.agregarVecino("3.3"); t3_6.agregarVecino("3.5"); t3_6.agregarVecino("5.7"); t3_6.agregarVecino("5.11"); t3_6.agregarVecino("5.1");
     t3_7.agregarVecino("3.1"); t3_7.agregarVecino("3.3"); t3_7.agregarVecino("3.5"); t3_7.agregarVecino("4.3"); t3_7.agregarVecino("4.5");
 
@@ -281,9 +281,7 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
             }
 
         }
-        if(bonificacion==0){
-            return 0;
-        }
+
         return bonificacion;
 
     }
