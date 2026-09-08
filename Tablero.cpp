@@ -272,14 +272,19 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
 
     int Tablero::calcularBonificacionContinentes(string colorJugador) const{
         //Entra dentro de cada uno de los continentes
+        int bonificacion=0;
         vector<Continente>::const_iterator buscar = continentes.begin();
         for(; buscar != continentes.end() ; ++buscar){
             if(buscar->estaControladoPor(colorJugador)){
-                return buscar->obtenerBonificacion();
+                bonificacion += buscar->obtenerBonificacion();
             }
 
         }
-        return -1;
+        if(bonificacion==0){
+            return 0;
+        }
+        return bonificacion;
+
     }
         
     bool Tablero::agregarUnidades(string codigoTerritorio, string colorJugador, int cantidad){
@@ -299,16 +304,16 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
         if(!existeTerritorio(codigoOrigen)){
             return false;
         }
-
-        Territorio* terr1 = buscarTerritorio(codigoOrigen);
-
+        
         if(!existeTerritorio(codigoDestino)){
             return false;
         }
 
+        Territorio* terr1 = buscarTerritorio(codigoOrigen);
+
         Territorio* terr2 = buscarTerritorio(codigoDestino);
 
-        if(terr1->obtenerColorPropietario()!=colorJugador){
+        if(terr1->obtenerColorPropietario()!=colorJugador || terr2->obtenerColorPropietario() != colorJugador){
             return false;
         }
 
@@ -318,14 +323,8 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
         if(!terr1->retirarUnidades(cantidad,minimoRestante)){
             return false;
         }
-        terr1->retirarUnidades(cantidad, minimoRestante);
 
-        if(!terr2->retirarUnidades(cantidad, minimoRestante)){
-            return false;
-        }
-        terr2->agregarUnidades(cantidad);
-
-        return true;
+        return terr2->agregarUnidades(cantidad);
 
     }
 
@@ -336,10 +335,6 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
 
         Territorio* territorio = buscarTerritorio(codigoTerritorio);
         if(territorio->obtenerColorPropietario() == nuevoColor){
-            return false;
-        }
-
-        if(!territorio->cambiarPropietario(nuevoColor, cantidad)){
             return false;
         }
         
