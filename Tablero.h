@@ -7,7 +7,6 @@
 using namespace std;
 class Tablero {
 private:
-    vector<Territorio> territorios;
     vector<Continente> continentes;
 public:
     Tablero();
@@ -15,36 +14,14 @@ public:
     Territorio* buscarTerritorio(string codigo);
     const Territorio* buscarTerritorio(string codigo) const;
     bool existeTerritorio(string codigo) const;
-    bool configurarTerritorio(
-        string codigo,
-        string colorPropietario,
-        int unidades
-    );
-    bool sonVecinos(
-        string codigoOrigen,
-        string codigoDestino
-    ) const;
+    bool configurarTerritorio(string codigo, string colorPropietario, int unidades);
+    bool sonVecinos(string codigoOrigen, string codigoDestino) const;
     int contarTerritorios(string colorJugador) const;
     int sumarUnidades(string colorJugador) const;
-    int calcularBonificacionContinentes(
-        string colorJugador
-    ) const;
-    bool agregarUnidades(
-        string codigoTerritorio,
-        string colorJugador,
-        int cantidad
-    );
-    bool trasladarUnidades(
-        string codigoOrigen,
-        string codigoDestino,
-        string colorJugador,
-        int cantidad,
-        int minimoRestante
-    );
-    bool cambiarPropietario(
-        string codigoTerritorio,
-        string nuevoColor
-    );
+    int calcularBonificacionContinentes(string colorJugador) const;
+    bool agregarUnidades(string codigoTerritorio, string colorJugador, int cantidad);
+    bool trasladarUnidades(string codigoOrigen, string codigoDestino, string colorJugador, int cantidad, int minimoRestante);
+    bool cambiarPropietario(string codigoTerritorio, string nuevoColor, int cantidad);
     bool todosLosTerritoriosConfigurados() const;
     void mostrarTablero() const;
 };
