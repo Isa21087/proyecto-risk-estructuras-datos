@@ -211,7 +211,7 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
         if(!buscarTerritorio(codigo)){//valida que exista el territorio
             return false;
         }
-        Territorio* territorio = buscarTerritorio(codigo);//crea un territorio
+        Territorio* territorio = buscarTerritorio(codigo);//crea un puntero hacia el territorio
 
         territorio->asignarPropietario(colorPropietario);//le asigna un propietario al territorio
         territorio->asignarUnidades(unidades);//le asigna unidades al territorio
@@ -275,9 +275,9 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
         //Entra dentro de cada uno de los continentes
         int bonificacion=0;
         vector<Continente>::const_iterator buscar = continentes.begin();
-        for(; buscar != continentes.end() ; ++buscar){
-            if(buscar->estaControladoPor(colorJugador)){
-                bonificacion += buscar->obtenerBonificacion();
+        for(; buscar != continentes.end() ; ++buscar){ //busca por cada continente
+            if(buscar->estaControladoPor(colorJugador)){ // si esta ese continente controlado solo por ese jugador
+                bonificacion += buscar->obtenerBonificacion(); //da la bonificacion que ese continente da
             }
 
         }
@@ -291,38 +291,43 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
             return false;
         }
 
+        //crea un puntero para poder modificar el territorio desde esta funcion
         Territorio* territorio = buscarTerritorio(codigoTerritorio);
+        //Verifica si se pueden agregar unidades al territorio
         if(territorio->obtenerColorPropietario()!=colorJugador){
+            //si no sale de la funcion
             return false;
         }
-
+        //Si sí agrega las unidades
         return territorio->agregarUnidades(cantidad);
     }
 
     bool Tablero::trasladarUnidades(string codigoOrigen, string codigoDestino, string colorJugador, int cantidad, int minimoRestante){
-        if(!existeTerritorio(codigoOrigen)){
+        if(!existeTerritorio(codigoOrigen)){//Verifica que el territorio desde donde salen las unidades existe
             return false;
         }
         
-        if(!existeTerritorio(codigoDestino)){
+        if(!existeTerritorio(codigoDestino)){//verifica que el territorio a donde llegan las unidades existe
             return false;
         }
 
+        //crea un puntero para poder modificar los territorios desde esta funcion
         Territorio* terr1 = buscarTerritorio(codigoOrigen);
-
         Territorio* terr2 = buscarTerritorio(codigoDestino);
 
+        //Verifica que los dos territorios que se estan usando sean del mismo propietario   
         if(terr1->obtenerColorPropietario()!=colorJugador || terr2->obtenerColorPropietario() != colorJugador){
             return false;
         }
 
-        if(!terr1->esVecino(codigoDestino)){
+        if(!terr1->esVecino(codigoDestino)){//verifica si el territorio a donde llegan las unidades es vecino del territorio desde donde salen
             return false;
         }
-        if(!terr1->retirarUnidades(cantidad,minimoRestante)){
+        if(!terr1->retirarUnidades(cantidad,minimoRestante)){//Verifica si se pueden retirar las unidades del territorio elegido 
             return false;
         }
 
+        //agrega las unidades al territorio destino
         return terr2->agregarUnidades(cantidad);
 
     }
@@ -332,11 +337,12 @@ const Territorio* Tablero::buscarTerritorio(string codigo) const{
             return false;
         }
 
+        //crea un puntero para poder modificar el territorio desde esta funcion
         Territorio* territorio = buscarTerritorio(codigoTerritorio);
-        if(territorio->obtenerColorPropietario() == nuevoColor){
+        if(territorio->obtenerColorPropietario() == nuevoColor){//Verifica que el territorio conquistado no sea de la misma perosna que lo esta conquistando
             return false;
         }
-        
+        //retorna si se pudo cambiar de propietario o no 
         return territorio->cambiarPropietario(nuevoColor, cantidad);
         
         

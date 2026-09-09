@@ -25,12 +25,16 @@ public:
     bool ejecutarObtencionUnidades(
         Jugador& jugador,
         Tablero& tablero,
-        int bonificacionCartas
+        int bonificacionCartas,
+        string codigoTerritorio
     );
     void registrarAtaqueTerminado();
     bool ejecutarFortificacion(
         Jugador& jugador,
-        Tablero& tablero
+        Tablero& tablero,
+        string codigoOrigen,
+        string codigoDestino,
+        int cantidad
     );
     void finalizarTurno(int cantidadJugadores);
 };

@@ -56,7 +56,7 @@ Territorio* Continente::buscarTerritorio(string codigo){
     vector<Territorio>::iterator buscar = territorios.begin();
     for(; buscar != territorios.end(); ++buscar){
         if(buscar ->obtenerCodigo() == codigo){
-            return &(*buscar);
+            return &(*buscar); //Como la funcion solicita un puntero la funcion retorna una direcicon de memoria
         }
     }
    return NULL;
@@ -66,7 +66,7 @@ const Territorio* Continente::buscarTerritorio(string codigo) const{
     vector<Territorio>::const_iterator buscar = territorios.begin();
     for(; buscar != territorios.end(); ++buscar){
         if(buscar ->obtenerCodigo() == codigo){
-            return &(*buscar);
+            return &(*buscar); //Como la funcion solicita un puntero la funcion retorna una direcicon de memoria
         }
     }
    return NULL;
