@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include "Ataque.h"
 #include "Jugador.h"
 #include "Tablero.h"
@@ -88,10 +89,15 @@ ResultadoAtaque Ataque::ejecutar(
     tablero.mostrarTablero();
 
     cout << "Ingrese el codigo del territorio desde el que desea atacar: ";
-    cin >> codigoOrigen;
+    if(!getline(cin, codigoOrigen)){
+        return resultado;
+    }
 
     cout << "Ingrese el codigo del territorio que desea atacar: ";
-    cin >> codigoDestino;
+
+    if(!getline(cin, codigoDestino)){
+        return resultado;
+    }
 
 
     //Se verifica que la configuracion del ataque sea valida.
@@ -255,40 +261,57 @@ ResultadoAtaque Ataque::ejecutar(
             cout << "El territorio fue conquistado." << endl;
 
 
-            int cantidadTraslado;
+            int cantidadTraslado = 0;
 
-            //Se calcula la cantidad maxima que se puede mover.
-            //Debe quedar minimo una unidad en el territorio origen.
+            // Debe quedar al menos una unidad en el origen.
             int maximoTraslado = origen->obtenerUnidades() - 1;
 
-
-            //Despues de conquistar se debe trasladar minimo una unidad
-            //al territorio nuevo y conservar una en el origen.
             cout << "Puede trasladar entre 1 y "
                  << maximoTraslado
                  << " unidades al territorio conquistado." << endl;
 
+            bool cantidadValida = false;
 
-            cout << "Cantidad de unidades que desea trasladar: ";
+            while(!cantidadValida){
 
-            cin >> cantidadTraslado;
+                cout << "Cantidad de unidades que desea trasladar: ";
 
+                string linea;
 
-            //Se valida que la cantidad de unidades sea permitida.
-            while(
-                cantidadTraslado < 1 ||
-                cantidadTraslado > maximoTraslado
-            ){
+                // Si se cierra la entrada, completa la conquista con el minimo.
+                if(!getline(cin, linea)){
 
-                cout << "Cantidad no valida." << endl;
+                    cantidadTraslado = 1;
+                    cantidadValida = true;
 
-                cout << "Ingrese una cantidad entre 1 y "
-                     << maximoTraslado << ": ";
+                    cout << "La entrada fue cerrada. Se trasladara una unidad para completar la conquista." << endl;
 
-                cin >> cantidadTraslado;
+                }
+                else{
+
+                    istringstream entrada(linea);
+                    string datoExtra;
+
+                    if(!(entrada >> cantidadTraslado)){
+                        cout << "Debe escribir una cantidad entera." << endl;
+                    }
+                    else if(entrada >> datoExtra){
+                        cout << "Debe escribir solo una cantidad entera." << endl;
+                    }
+                    else if(cantidadTraslado < 1 ||
+                            cantidadTraslado > maximoTraslado){
+
+                        cout << "Ingrese una cantidad entre 1 y "
+                             << maximoTraslado << "." << endl;
+
+                    }
+                    else{
+                        cantidadValida = true;
+                    }
+
+                }
 
             }
-
 
             //Se retiran primero las unidades del territorio origen.
             origen->retirarUnidades(cantidadTraslado,1);
@@ -320,24 +343,25 @@ ResultadoAtaque Ataque::ejecutar(
         //el jugador puede decidir si continua atacando.
         else if(origen->obtenerUnidades() > 1){
 
-            char respuesta;
-
+            string respuesta;
 
             cout << "Desea continuar atacando este territorio? (s/n): ";
 
-            cin >> respuesta;
+            if(!getline(cin, respuesta)){
+                return resultado;
+            }
 
+            while(respuesta != "s" && respuesta != "S" && respuesta != "n" && respuesta != "N"){
 
-            if(respuesta == 's' || respuesta == 'S'){
+                cout << "Escriba s para continuar o n para terminar: ";
 
-                continuar = true;
+                if(!getline(cin, respuesta)){
+                    return resultado;
+                }
 
             }
-            else{
 
-                continuar = false;
-
-            }
+            continuar = (respuesta == "s" || respuesta == "S");
 
         }
 

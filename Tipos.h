@@ -18,14 +18,21 @@ enum EstadoComando {
     JUGADOR_NO_VALIDO,
     JUGADOR_FUERA_DE_TURNO,
     JUGADOR_NO_HA_UBICADO_UNIDADES,
-    JUGADOR_NO_HA_ATACADO
+    JUGADOR_NO_HA_ATACADO,
+    JUGADOR_YA_OBTUVO_UNIDADES,
+    ENTRADA_CERRADA,
+    JUGADOR_YA_TERMINO_ATAQUE
 };
+
 enum TipoCarta {
+
     CARTA_INFANTERIA,
     CARTA_CABALLERIA,
     CARTA_ARTILLERIA,
     CARTA_COMODIN
+
 };
+
 struct ResultadoAtaque {
     bool ataqueRealizado;
     bool conquistoTerritorio;
