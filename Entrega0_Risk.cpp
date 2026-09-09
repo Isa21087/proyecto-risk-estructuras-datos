@@ -1,75 +1,85 @@
 #include <iostream>
 #include "Comandos.h"
-// el que lea esto le deseo el mejor dia :)
+#include "Tablero.h" //
+#include "Ataque.h"  //[cite: 5]
+#include "Jugador.h" // Asumimos que tus compañeros ya definieron su estructura básica
+
 using namespace std;
 
 int main() {
+    // ========================================================
+    // 1. SETUP DE PRUEBAS PARA EL COMANDO ATACAR
+    // ========================================================
+    Tablero tablero;
+    tablero.inicializarEstructura(); // Carga todos los continentes y territorios[cite: 9]
+    
+    // Configuramos territorios simulados usando las funciones de Tablero[cite: 9]
+    // 2.2 Brasil será el origen (Rojo, 5 tropas). 2.1 Argentina será el destino (Verde, 1 tropa).
+    tablero.configurarTerritorio("2.2", "Rojo", 5); 
+    tablero.configurarTerritorio("2.1", "Verde", 1); 
 
-    string linea; //Guarda toda la linea de texto que escribe el usuario despues del $
-    vector<string> palabras; //Guarda las palabras que devuelve la funcion separarEntrada
+    // Creamos el jugador de prueba y la instancia del sistema de ataque
+    Jugador jugadorPrueba("Alejo", "Rojo"); 
+    Ataque sistemaAtaque;
+    // ========================================================
 
-    //Controla si el programa debe seguir funcionando
-    //empieza en true para que pueda entrar al while
+
+    string linea; 
+    vector<string> palabras; 
     bool continuar = true;
 
-    //Mientras continuar sea true el programa sigue mostrando el y permite que el usuario escriba mas comandos
     while (continuar) {
-
         cout << "$ ";
 
-        //Isa: getline lee toda la linea escrita por el usuario
-        //incluyendo los espacios que haya entre las palabras
         if (!getline(cin, linea)) {
-
-            //Si getline no puede seguir leyendo significa que la entrada fue cerrada
             cout << endl;
             cout << "La entrada fue cerrada. Finalizando el programa." << endl;
-
-            //Cambia continuar a false para que el while termine
             continuar = false;
         }
         else {
-
-            //envia la linea escrita a separarEntrada y guarda en palabras el vector que devuelve la funcion
             palabras = separarEntrada(linea);
 
-            //Si el tamaño del vector es cero significa que el usuario presiono Enter sin escribir ningun comando
             if (palabras.size() == 0) {
                 cout << "(Entrada vacia) Debe escribir un comando." << endl;
                 cout << "Escriba 'ayuda' para ver los comandos disponibles." << endl;
             }
             else {
-
-                //La primera palabra siempre corresponde al nombre del comando
                 string comando = palabras[0];
-
-                //La cantidad de argumentos es la cantidad total de palabras menos uno porque la primera palabra es el comando y no cuenta como argumento
                 int cantidadArgumentos = palabras.size() - 1;
 
-                //Alejo e Isa: valida que el comando exista y que
-                //la cantidad de argumentos sea correcta
                 if (validarComando(comando, cantidadArgumentos)) {
 
-                    //Saul: si el comando es ayuda se debe mostrar
-                    //la ayuda general o la ayuda de un comando especifico
                     if (comando == "ayuda") {
-
-                        //Si ayuda no recibe argumentos muestra todos los comandos
                         if (cantidadArgumentos == 0) {
                             mostrarAyudaGeneral();
                         }
                         else {
-
-                            //Si ayuda recibe un argumento busca la ayuda
-                            //del comando que esta guardado en palabras[1]
                             mostrarAyudaComando(palabras[1]);
                         }
                     }
-
-                    //Si el comando es salir se termina la ejecucion del programa
                     else if (comando == "salir") {
                         cout << "Finalizando el juego. Hasta pronto." << endl;
                         continuar = false;
+                    }
+                    // ========================================================
+                    // 2. INTERCEPCIÓN DEL COMANDO ATACAR
+                    // ========================================================
+                    else if (comando == "atacar") {
+                        string nombreAtacante = palabras[1];
+                        
+                        // Validaciones exigidas en tu responsabilidad
+                        if (nombreAtacante != jugadorPrueba.obtenerNombre()) {
+                             cout << "(Jugador no valido) El jugador " << nombreAtacante << " no forma parte de esta partida." << endl;
+                        } 
+                        else {
+                             // Ejecutamos la lógica de batalla[cite: 5]
+                             ResultadoAtaque res = sistemaAtaque.ejecutar(jugadorPrueba, tablero);
+                             
+                             // Si el ataque se realizó exitosamente (no rebotó en la validación inicial)
+                             if (res.ataqueRealizado) {
+                                 cout << "(Comando correcto) El jugador " << nombreAtacante << " ha terminado de atacar." << endl;
+                             }
+                        }
                     }
                     else {
                         cout << "(Comando correcto) El comando '"
