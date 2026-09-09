@@ -22,14 +22,14 @@ EtapaTurno Turno::obtenerEtapaActual() const{
 }
 
 bool Turno::esTurnoDe(int posicionJugador) const{
-    if(posicionJugador != posicionJugador){
+    if(posicionJugadorActual != posicionJugador){
         return false;
     }
     return true;
 }
 
 bool Turno::puedeObtenerUnidades() const{
-    if(etapaActual == ETAPA_OBTENER_UNIDADES){
+    if(etapaActual != ETAPA_OBTENER_UNIDADES){
         return false;
     }
     return true;
@@ -70,13 +70,18 @@ int Turno::calcularNuevasUnidades(const Jugador& jugador, const Tablero& tablero
 
 bool Turno::ejecutarObtencionUnidades(Jugador& jugador, Tablero& tablero, int bonificacionCartas, string codigoTerritorio){
     //Verifica si puede obetner unidades
-    return puedeObtenerUnidades();
+    if(!puedeObtenerUnidades()){
+        return false;
+    }
 
     //Calcula la cantidad de unidades que se obtienen
     int unds = calcularNuevasUnidades(jugador, tablero, bonificacionCartas);
 
     //asigna las unidades obtenidas a un territorio elegido por el jugador
-    tablero.agregarUnidades(codigoTerritorio, jugador.obtenerColor(), unds);
+    if(!tablero.agregarUnidades(codigoTerritorio, jugador.obtenerColor(), unds)){
+        //Si no puede retorna falso
+        return false;
+    }
 
     //Termina la fase de obtener unidades y comienza la fase de ataque
     etapaActual=ETAPA_ATACAR;
@@ -84,7 +89,7 @@ bool Turno::ejecutarObtencionUnidades(Jugador& jugador, Tablero& tablero, int bo
     return true;
 }
 void Turno::registrarAtaqueTerminado(){
-    etapaActual=ETAPA_OBTENER_UNIDADES;
+    etapaActual=ETAPA_FORTIFICAR;
 }
 bool Turno::ejecutarFortificacion(Jugador& jugador, Tablero& tablero, string codigoOrigen, string codigoDestino, int cantidad){
     if(etapaActual!= ETAPA_FORTIFICAR){ //verificar que la etapa este correcta
