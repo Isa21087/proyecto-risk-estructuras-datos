@@ -56,7 +56,7 @@ int Turno::calcularNuevasUnidades(const Jugador& jugador, const Tablero& tablero
     //Se calcula la cantidad de unidades que se van a obtener por territorio
     undsT = (tablero.sumarUnidades(jugador.obtenerColor()))/3;
 
-    //Si la cantidad calculada es menor a 3, segun el enunciado solo se pueden ganar 3 unidades minimo
+    //Si la cantidad calculada es menor a 3
     if(undsT < 3){
         undsT = 3;
     }
