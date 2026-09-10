@@ -1,0 +1,7 @@
+# Archivos compilados
+*.o
+*.exe
+a.out
+
+# Archivos temporales
+*.out
