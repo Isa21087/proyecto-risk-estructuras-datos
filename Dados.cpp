@@ -1,14 +1,10 @@
 #include "Dados.h"
 // Para usar rand() se utiliza para generar números aleatorios y srand() se utiliza para inicializar el valor semilla del generador de números aleatorios. 
 #include <cstdlib>
-// Para usar la hora del sistema como semilla. Convierte un valor time_t en una representación local de fecha y hora
-#include <ctime>
 using namespace std;
 
-// Constructor de Dados
+// Crea los dados sin resultados guardados.
 Dados::Dados() {
-    // La semilla hace que los resultados cambien en cada ejecución
-    srand(time(NULL));
 }
 
 // Lanza la cantidad de dados que se recibe

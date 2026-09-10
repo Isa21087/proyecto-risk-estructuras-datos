@@ -1,14 +1,17 @@
 #include <iostream>
 #include "Comandos.h"
 #include "Partida.h"
-
+#include <cstdlib>
+#include <ctime>
 // *el que lea esto le deseo el mejor dia :)*
 using namespace std;
 
-// Inicializa la partida sin datos cargados.
-Partida partida;
+
 
 int main() {
+
+    // Inicializa una sola vez la aleatoriedad de dados y cartas.
+    srand(time(NULL));
 
     // *Guarda la partida durante la ejecucion del programa.*
     Partida partida;

@@ -271,8 +271,11 @@ EstadoComando Partida::inicializar(string nombreArchivo){
     jugadores = jugadoresLeidos;
     tablero = tableroLeido;
 
-        // El primer jugador del archivo empieza el turno.
+// El primer jugador del archivo empieza el turno.
     turno.iniciar(0);
+
+// Prepara las cartas para la nueva partida.
+    mazo.inicializarMazo();
 
     inicializada = true;
     terminada = false;
@@ -337,9 +340,10 @@ int Partida::buscarPosicionJugador(string nombreJugador) const{
 
 }
 
-// Revisa el turno y permite repartir las unidades nuevas.
-EstadoComando Partida::obtenerUnidades(string nombreJugador){
-
+// Revisa el turno y permite canjear cartas
+// y repartir las unidades nuevas.
+EstadoComando Partida::obtenerUnidades(string nombreJugador)
+{
     EstadoComando estado = validarEstadoJuego();
 
     if(estado != COMANDO_CORRECTO){
@@ -352,24 +356,310 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador){
         return JUGADOR_NO_VALIDO;
     }
 
-    if(posicion != turno.obtenerPosicionJugadorActual()){
+    if(!turno.esTurnoDe(posicion)){
         return JUGADOR_FUERA_DE_TURNO;
     }
 
-    if(turno.obtenerEtapaActual() != ETAPA_OBTENER_UNIDADES){
+    if(!turno.puedeObtenerUnidades()){
         return JUGADOR_YA_OBTUVO_UNIDADES;
     }
 
-    // El canje de cartas queda pendiente.
+    // Se crean copias temporales para que el jugador,
+    // el tablero y el mazo solamente cambien cuando
+    // se termine correctamente el comando.
+    Jugador jugadorTemporal =
+        jugadores[posicion];
+
+    Tablero tableroTemporal =
+        tablero;
+
+    Mazo mazoTemporal =
+        mazo;
+
     int bonificacionCartas = 0;
 
-    if(!turno.ejecutarObtencionUnidades(jugadores[posicion], tablero, bonificacionCartas)){
-        return ENTRADA_CERRADA;
+    bool terminarCanjes = false;
+
+    // El jugador solamente puede intentar un canje
+    // cuando tiene por lo menos tres cartas.
+    while(!terminarCanjes &&
+          jugadorTemporal.obtenerCartas().size() >= 3){
+
+        // La referencia permite consultar el vector
+        // sin crear una copia de todas las cartas.
+        const vector<Carta>& cartasJugador =
+            jugadorTemporal.obtenerCartas();
+
+        cout << "Cartas del jugador:" << endl;
+
+        for(int i = 0; i < cartasJugador.size(); i++){
+
+            cout << i + 1 << ". ";
+
+            if(cartasJugador[i].obtenerTipo()
+                == CARTA_INFANTERIA){
+
+                cout << "Infanteria";
+
+            }
+            else if(cartasJugador[i].obtenerTipo()
+                == CARTA_CABALLERIA){
+
+                cout << "Caballeria";
+
+            }
+            else if(cartasJugador[i].obtenerTipo()
+                == CARTA_ARTILLERIA){
+
+                cout << "Artilleria";
+
+            }
+            else{
+
+                cout << "Comodin";
+
+            }
+
+            string codigoTerritorio =
+                cartasJugador[i].obtenerCodigoTerritorio();
+
+            if(codigoTerritorio != ""){
+
+                cout << " - Territorio "
+                     << codigoTerritorio;
+
+            }
+
+            cout << endl;
+
+        }
+
+        cout << "Desea intercambiar tres cartas? (s/n): ";
+
+        string linea;
+
+        if(!getline(cin, linea)){
+            return ENTRADA_CERRADA;
+        }
+
+        istringstream entrada(linea);
+
+        string respuesta;
+        string datoExtra;
+
+        if(!(entrada >> respuesta)){
+
+            cout << "Debe escribir s o n." << endl;
+
+        }
+        else if(entrada >> datoExtra){
+
+            cout << "Escriba solamente s o n." << endl;
+
+        }
+        else if(respuesta == "n" ||
+                respuesta == "N"){
+
+            terminarCanjes = true;
+
+        }
+        else if(respuesta == "s" ||
+                respuesta == "S"){
+
+            bool seleccionTerminada = false;
+
+            while(!seleccionTerminada){
+
+                cout << "Escriba las posiciones de las tres cartas "
+                     << "o n para cancelar: ";
+
+                string seleccion;
+
+                if(!getline(cin, seleccion)){
+                    return ENTRADA_CERRADA;
+                }
+
+                if(seleccion == "n" ||
+                   seleccion == "N"){
+
+                    seleccionTerminada = true;
+
+                }
+                else{
+
+                    istringstream entradaSeleccion(
+                        seleccion
+                    );
+
+                    int posicionUno;
+                    int posicionDos;
+                    int posicionTres;
+                    string datoSobrante;
+
+                    if(!(entradaSeleccion
+                        >> posicionUno
+                        >> posicionDos
+                        >> posicionTres)){
+
+                        cout << "Debe escribir tres posiciones enteras."
+                             << endl;
+
+                    }
+                    else if(entradaSeleccion >> datoSobrante){
+
+                        cout << "Escriba solamente las tres posiciones."
+                             << endl;
+
+                    }
+                    else{
+
+                        int bonificacionCanje =
+                            mazoTemporal.procesarIntercambio(
+                                jugadorTemporal,
+                                tableroTemporal,
+                                posicionUno,
+                                posicionDos,
+                                posicionTres
+                            );
+
+                        if(bonificacionCanje == 0){
+
+                            cout << "Las cartas seleccionadas no forman "
+                                 << "una combinacion valida."
+                                 << endl;
+
+                        }
+                        else{
+
+                            bonificacionCartas +=
+                                bonificacionCanje;
+
+                            cout << "Canje realizado. "
+                                 << "Unidades obtenidas: "
+                                 << bonificacionCanje
+                                 << endl;
+
+                                 // Solo se agregan las dos unidades cuando el territorio
+// de la carta pertenece al jugador.
+                            cout << "Si alguna carta corresponde a un territorio propio, "
+                                << "se agregaron 2 unidades en ese territorio."
+                                << endl;
+
+                            seleccionTerminada = true;
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+        else{
+
+            cout << "Debe escribir s o n." << endl;
+
+        }
+
     }
 
-    return COMANDO_CORRECTO;
+    int unidadesPendientes =
+        turno.calcularNuevasUnidades(
+            jugadorTemporal,
+            tableroTemporal,
+            bonificacionCartas
+        );
 
+    cout << "Unidades disponibles: "
+         << unidadesPendientes << endl;
+
+    while(unidadesPendientes > 0){
+
+        cout << "Escriba el codigo del territorio "
+             << "y la cantidad de unidades: ";
+
+        string linea;
+
+        if(!getline(cin, linea)){
+            return ENTRADA_CERRADA;
+        }
+
+        istringstream entrada(linea);
+
+        string codigoTerritorio;
+        int cantidad;
+        string datoExtra;
+
+        if(!(entrada >> codigoTerritorio >> cantidad)){
+
+            cout << "Debe escribir un codigo y una cantidad entera."
+                 << endl;
+
+        }
+        else if(entrada >> datoExtra){
+
+            cout << "Solo debe escribir el codigo y la cantidad."
+                 << endl;
+
+        }
+        else if(cantidad <= 0){
+
+            cout << "La cantidad debe ser mayor que cero."
+                 << endl;
+
+        }
+        else if(cantidad > unidadesPendientes){
+
+            cout << "No tiene suficientes unidades disponibles."
+                 << endl;
+
+        }
+        else if(!tableroTemporal.existeTerritorio(
+            codigoTerritorio
+        )){
+
+            cout << "El territorio no existe." << endl;
+
+        }
+        else if(!turno.ejecutarObtencionUnidades(
+            jugadorTemporal,
+            tableroTemporal,
+            codigoTerritorio,
+            cantidad
+        )){
+
+            cout << "Elija un territorio que pertenezca al jugador."
+                 << endl;
+
+        }
+        else{
+
+            unidadesPendientes -= cantidad;
+
+            cout << "Unidades restantes: "
+                 << unidadesPendientes << endl;
+
+        }
+
+    }
+
+    // Los cambios se guardan cuando el jugador termina
+    // de repartir todas las unidades.
+    jugadores[posicion] =
+        jugadorTemporal;
+
+    tablero =
+        tableroTemporal;
+
+    mazo =
+        mazoTemporal;
+
+    turno.registrarUnidadesObtenidas();
+
+    return COMANDO_CORRECTO;
 }
+
 // Revisa si un jugador conquisto todo el tablero.
 bool Partida::comprobarGanador(){
 
@@ -422,6 +712,7 @@ EstadoComando Partida::atacar(string nombreJugador){
     }
 
     bool continuar = true;
+    bool cartaEntregada = false;
 
     while(continuar){
 
@@ -442,7 +733,23 @@ EstadoComando Partida::atacar(string nombreJugador){
 
             // Comprueba la victoria despues de una conquista.
             if(resultado.conquistoTerritorio){
+                // Entrega una sola carta aunque conquiste varios territorios.
+                if(!cartaEntregada){
 
+                    if(mazo.entregarCarta(jugadores[posicion])){
+
+                        cartaEntregada = true;
+
+                        cout << "Recibio una carta por conquistar un territorio." << endl;
+                        cout << "Cartas del jugador: "
+                             << jugadores[posicion].obtenerCartas().size() << endl;
+
+                    }
+                    else{
+                        cout << "No quedan cartas disponibles en el mazo." << endl;
+                    }
+
+                }
                 if(comprobarGanador()){
                     cout << "El ganador es " << ganador << "." << endl;
                     return COMANDO_CORRECTO;
@@ -466,9 +773,10 @@ EstadoComando Partida::atacar(string nombreJugador){
     return COMANDO_CORRECTO;
 
 }
-// Permite fortificar y termina el turno del jugador.
-EstadoComando Partida::fortificar(string nombreJugador){
 
+// Permite fortificar y termina el turno del jugador.
+EstadoComando Partida::fortificar(string nombreJugador)
+{
     EstadoComando estado = validarEstadoJuego();
 
     if(estado != COMANDO_CORRECTO){
@@ -481,24 +789,131 @@ EstadoComando Partida::fortificar(string nombreJugador){
         return JUGADOR_NO_VALIDO;
     }
 
-    if(posicion != turno.obtenerPosicionJugadorActual()){
+    if(!turno.esTurnoDe(posicion)){
         return JUGADOR_FUERA_DE_TURNO;
     }
 
-    if(turno.obtenerEtapaActual() != ETAPA_FORTIFICAR){
+    if(!turno.puedeFortificar()){
         return JUGADOR_NO_HA_ATACADO;
     }
 
-    if(!turno.ejecutarFortificacion(jugadores[posicion], tablero)){
-        return ENTRADA_CERRADA;
+    bool fortificacionTerminada = false;
+
+    // Se usa una copia para conservar el tablero original
+    // si la entrada se cierra antes de terminar.
+    Tablero tableroTemporal = tablero;
+
+    while(!fortificacionTerminada){
+
+        cout << "Escriba origen, destino y cantidad, o n para no trasladar: ";
+
+        string linea;
+
+        if(!getline(cin, linea)){
+            return ENTRADA_CERRADA;
+        }
+
+        istringstream entrada(linea);
+
+        string codigoOrigen;
+        string codigoDestino;
+        string datoExtra;
+        int cantidad;
+
+        if(!(entrada >> codigoOrigen)){
+
+            cout << "Debe escribir los datos o n para terminar."
+                 << endl;
+
+        }
+        else if(codigoOrigen == "n" || codigoOrigen == "N"){
+
+            if(entrada >> datoExtra){
+
+                cout << "Escriba solamente n para terminar."
+                     << endl;
+
+            }
+            else{
+
+                fortificacionTerminada = true;
+
+            }
+
+        }
+        else if(!(entrada >> codigoDestino >> cantidad)){
+
+            cout << "Debe escribir origen, destino y una cantidad entera."
+                 << endl;
+
+        }
+        else if(entrada >> datoExtra){
+
+            cout << "Solo debe escribir origen, destino y cantidad."
+                 << endl;
+
+        }
+        else if(codigoOrigen == codigoDestino){
+
+            cout << "Debe escoger dos territorios diferentes."
+                 << endl;
+
+        }
+        else if(cantidad <= 0){
+
+            cout << "La cantidad debe ser mayor que cero."
+                 << endl;
+
+        }
+        else if(!tableroTemporal.existeTerritorio(codigoOrigen) ||
+                !tableroTemporal.existeTerritorio(codigoDestino)){
+
+            cout << "Uno de los territorios no existe."
+                 << endl;
+
+        }
+        else if(!tableroTemporal.sonVecinos(
+            codigoOrigen,
+            codigoDestino
+        )){
+
+            cout << "Los territorios deben ser vecinos."
+                 << endl;
+
+        }
+        else if(!turno.ejecutarFortificacion(
+            jugadores[posicion],
+            tableroTemporal,
+            codigoOrigen,
+            codigoDestino,
+            cantidad
+        )){
+
+            cout << "No se pudo realizar la fortificacion. "
+                 << "Verifique que ambos territorios sean propios "
+                 << "y que haya suficientes unidades."
+                 << endl;
+
+        }
+        else{
+
+            tablero = tableroTemporal;
+            fortificacionTerminada = true;
+
+        }
+
     }
 
     // Avanza hasta encontrar un jugador que conserve territorios.
     do{
+
         turno.finalizarTurno(jugadores.size());
+
     }while(tablero.contarTerritorios(
-        jugadores[turno.obtenerPosicionJugadorActual()].obtenerColor()) == 0);
+        jugadores[
+            turno.obtenerPosicionJugadorActual()
+        ].obtenerColor()
+    ) == 0);
 
     return COMANDO_CORRECTO;
-
 }
