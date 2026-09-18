@@ -1,0 +1,450 @@
+Script started on 2026-09-09 23:24:07-05:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="184" LINES="45"]
+[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ [7mg++ -std=c++17 *.cpp[27mg++ -std=c++17 *.cpp
+[?2004l[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ [7m./a.out[27m./a.out
+[?2004l$ inicializar partida.txt
+(Comando correcto) El juego se ha inicializado correctamente.
+$ obtener_unidades Isa
+Unidades disponibles: 4
+Escriba el codigo del territorio y la cantidad de unidades: 1.2 4
+Unidades restantes: 0
+(Comando correcto) El jugador Isa ha terminado de reclamar y ubicar sus unidades.
+$ atacar Isa
+Desea realizar un ataque? (s/n): s
+========== TABLERO ==========
+Continente: America del Norte
+  Territorio: Alaska
+    Codigo: 1.1
+    Propietario: verde
+    Unidades: 3
+  Territorio: Alberta
+    Codigo: 1.2
+    Propietario: azul
+    Unidades: 7
+  Territorio: America Central
+    Codigo: 1.3
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Estados Unidos Orientales
+    Codigo: 1.4
+    Propietario: verde
+    Unidades: 3
+  Territorio: Groenlandia
+    Codigo: 1.5
+    Propietario: azul
+    Unidades: 3
+  Territorio: Territorio Noroccidental
+    Codigo: 1.6
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Ontario
+    Codigo: 1.7
+    Propietario: verde
+    Unidades: 3
+  Territorio: Quebec
+    Codigo: 1.8
+    Propietario: azul
+    Unidades: 3
+  Territorio: Estados Unidos Occidentales
+    Codigo: 1.9
+    Propietario: rojo
+    Unidades: 3
+Continente: America del Sur
+  Territorio: Argentina
+    Codigo: 2.1
+    Propietario: verde
+    Unidades: 3
+  Territorio: Brasil
+    Codigo: 2.2
+    Propietario: azul
+    Unidades: 3
+  Territorio: Peru
+    Codigo: 2.3
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Venezuela
+    Codigo: 2.4
+    Propietario: verde
+    Unidades: 3
+Continente: Europa
+  Territorio: Gran Bretana
+    Codigo: 3.1
+    Propietario: azul
+    Unidades: 3
+  Territorio: Islandia
+    Codigo: 3.2
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Europa del Norte
+    Codigo: 3.3
+    Propietario: verde
+    Unidades: 3
+  Territorio: Escandinavia
+    Codigo: 3.4
+    Propietario: azul
+    Unidades: 3
+  Territorio: Europa del Sur
+    Codigo: 3.5
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Ucrania
+    Codigo: 3.6
+    Propietario: verde
+    Unidades: 3
+  Territorio: Europa Occidental
+    Codigo: 3.7
+    Propietario: azul
+    Unidades: 3
+Continente: Africa
+  Territorio: Congo
+    Codigo: 4.1
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Africa Oriental
+    Codigo: 4.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: Egipto
+    Codigo: 4.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Madagascar
+    Codigo: 4.4
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Africa del Norte
+    Codigo: 4.5
+    Propietario: verde
+    Unidades: 2
+  Territorio: Africa del Sur
+    Codigo: 4.6
+    Propietario: azul
+    Unidades: 2
+Continente: Asia
+  Territorio: Afghanistan
+    Codigo: 5.1
+    Propietario: rojo
+    Unidades: 2
+  Territorio: China
+    Codigo: 5.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: India
+    Codigo: 5.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Irkutsk
+    Codigo: 5.4
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Japon
+    Codigo: 5.5
+    Propietario: verde
+    Unidades: 2
+  Territorio: Kamchatka
+    Codigo: 5.6
+    Propietario: azul
+    Unidades: 2
+  Territorio: Medio Oriente
+    Codigo: 5.7
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Mongolia
+    Codigo: 5.8
+    Propietario: verde
+    Unidades: 2
+  Territorio: Siam
+    Codigo: 5.9
+    Propietario: azul
+    Unidades: 2
+  Territorio: Siberia
+    Codigo: 5.10
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Ural
+    Codigo: 5.11
+    Propietario: verde
+    Unidades: 2
+  Territorio: Yakutsk
+    Codigo: 5.12
+    Propietario: azul
+    Unidades: 2
+Continente: Oceania
+  Territorio: Australia Oriental
+    Codigo: 6.1
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Indonesia
+    Codigo: 6.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: Nueva Guinea
+    Codigo: 6.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Australia Occidental
+    Codigo: 6.4
+    Propietario: rojo
+    Unidades: 2
+Ingrese el codigo del territorio desde el que desea atacar: 1.2
+Ingrese el codigo del territorio que desea atacar: 1.1
+Dados del atacante: 6 5 1 
+Dados del defensor: 6 1 
+Comparacion 1: 6 contra 6
+El atacante pierde una unidad.
+Comparacion 2: 5 contra 1
+El defensor pierde una unidad.
+Unidades del atacante: 6
+Unidades del defensor: 2
+Desea continuar atacando este territorio? (s/n): s
+Dados del atacante: 5 3 1 
+Dados del defensor: 2 1 
+Comparacion 1: 5 contra 2
+El defensor pierde una unidad.
+Comparacion 2: 3 contra 1
+El defensor pierde una unidad.
+Unidades del atacante: 6
+Unidades del defensor: 0
+El territorio fue conquistado.
+Puede trasladar entre 0 y 5 unidades al territorio conquistado.
+Cantidad de unidades que desea trasladar: 0
+Nuevo propietario del territorio: azul
+Recibio una carta por conquistar un territorio.
+Cartas del jugador: 1
+Desea realizar un ataque? (s/n): n
+(Comando correcto) El jugador Isa ha terminado de atacar.
+$ estado_juego
+========== ESTADO DEL JUEGO ==========
+Cantidad de jugadores: 3
+Jugador: Isa | Color: azul
+Jugador: Saul | Color: verde
+Jugador: Alejo | Color: rojo
+Turno actual: Isa
+========== TABLERO ==========
+Continente: America del Norte
+  Territorio: Alaska
+    Codigo: 1.1
+    Propietario: azul
+    Unidades: 0
+  Territorio: Alberta
+    Codigo: 1.2
+    Propietario: azul
+    Unidades: 6
+  Territorio: America Central
+    Codigo: 1.3
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Estados Unidos Orientales
+    Codigo: 1.4
+    Propietario: verde
+    Unidades: 3
+  Territorio: Groenlandia
+    Codigo: 1.5
+    Propietario: azul
+    Unidades: 3
+  Territorio: Territorio Noroccidental
+    Codigo: 1.6
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Ontario
+    Codigo: 1.7
+    Propietario: verde
+    Unidades: 3
+  Territorio: Quebec
+    Codigo: 1.8
+    Propietario: azul
+    Unidades: 3
+  Territorio: Estados Unidos Occidentales
+    Codigo: 1.9
+    Propietario: rojo
+    Unidades: 3
+Continente: America del Sur
+  Territorio: Argentina
+    Codigo: 2.1
+    Propietario: verde
+    Unidades: 3
+  Territorio: Brasil
+    Codigo: 2.2
+    Propietario: azul
+    Unidades: 3
+  Territorio: Peru
+    Codigo: 2.3
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Venezuela
+    Codigo: 2.4
+    Propietario: verde
+    Unidades: 3
+Continente: Europa
+  Territorio: Gran Bretana
+    Codigo: 3.1
+    Propietario: azul
+    Unidades: 3
+  Territorio: Islandia
+    Codigo: 3.2
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Europa del Norte
+    Codigo: 3.3
+    Propietario: verde
+    Unidades: 3
+  Territorio: Escandinavia
+    Codigo: 3.4
+    Propietario: azul
+    Unidades: 3
+  Territorio: Europa del Sur
+    Codigo: 3.5
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Ucrania
+    Codigo: 3.6
+    Propietario: verde
+    Unidades: 3
+  Territorio: Europa Occidental
+    Codigo: 3.7
+    Propietario: azul
+    Unidades: 3
+Continente: Africa
+  Territorio: Congo
+    Codigo: 4.1
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Africa Oriental
+    Codigo: 4.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: Egipto
+    Codigo: 4.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Madagascar
+    Codigo: 4.4
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Africa del Norte
+    Codigo: 4.5
+    Propietario: verde
+    Unidades: 2
+  Territorio: Africa del Sur
+    Codigo: 4.6
+    Propietario: azul
+    Unidades: 2
+Continente: Asia
+  Territorio: Afghanistan
+    Codigo: 5.1
+    Propietario: rojo
+    Unidades: 2
+  Territorio: China
+    Codigo: 5.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: India
+    Codigo: 5.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Irkutsk
+    Codigo: 5.4
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Japon
+    Codigo: 5.5
+    Propietario: verde
+    Unidades: 2
+  Territorio: Kamchatka
+    Codigo: 5.6
+    Propietario: azul
+    Unidades: 2
+  Territorio: Medio Oriente
+    Codigo: 5.7
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Mongolia
+    Codigo: 5.8
+    Propietario: verde
+    Unidades: 2
+  Territorio: Siam
+    Codigo: 5.9
+    Propietario: azul
+    Unidades: 2
+  Territorio: Siberia
+    Codigo: 5.10
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Ural
+    Codigo: 5.11
+    Propietario: verde
+    Unidades: 2
+  Territorio: Yakutsk
+    Codigo: 5.12
+    Propietario: azul
+    Unidades: 2
+Continente: Oceania
+  Territorio: Australia Oriental
+    Codigo: 6.1
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Indonesia
+    Codigo: 6.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: Nueva Guinea
+    Codigo: 6.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Australia Occidental
+    Codigo: 6.4
+    Propietario: rojo
+    Unidades: 2
+$ salir
+[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ clear
+[?2004l[H[2J[3J[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ [7mg++ -std=c++17 *.cpp[27mg++ -std=c++17 *.cpp
+[?2004l[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ [7mzip -j entrega1_risk.zip *.h *.cpp *.txt[27mzip -j entrega1_risk.zip *.h *.cpp *.txt
+[?2004l  adding: Ataque.h (deflated 50%)
+  adding: Carta.h (deflated 48%)
+  adding: Comandos.h (deflated 62%)
+  adding: Continente.h (deflated 60%)
+  adding: Dados.h (deflated 53%)
+  adding: Jugador.h (deflated 52%)
+  adding: Mazo.h (deflated 56%)
+  adding: Partida.h (deflated 65%)
+  adding: Tablero.h (deflated 64%)
+  adding: Territorio.h (deflated 65%)
+  adding: Tipos.h (deflated 51%)
+  adding: Turno.h (deflated 63%)
+  adding: Ataque.cpp (deflated 75%)
+  adding: Carta.cpp (deflated 59%)
+  adding: Comandos.cpp (deflated 75%)
+  adding: Continente.cpp (deflated 72%)
+  adding: Dados.cpp (deflated 63%)
+  adding: Entrega0_Risk.cpp (deflated 82%)
+  adding: Jugador.cpp (deflated 64%)
+  adding: Mazo.cpp (deflated 73%)
+  adding: Partida.cpp (deflated 80%)
+  adding: Tablero.cpp (deflated 82%)
+  adding: Territorio.cpp (deflated 69%)
+  adding: Turno.cpp (deflated 72%)
+  adding: partida.txt (deflated 68%)
+  adding: prueba_origen_una_unidad.txt (deflated 67%)
+  adding: salida_P08.txt (deflated 77%)
+  adding: salida_P10_P11.txt (deflated 83%)
+[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ [7mzip -j entrega1_risk.zip *.h *.cpp *.txt[27mzip -j entrega1_risk.zip *.h *.cpp *.txt
+[?2004lupdating: Ataque.h (deflated 50%)
+updating: Carta.h (deflated 48%)
+updating: Comandos.h (deflated 62%)
+updating: Continente.h (deflated 60%)
+updating: Dados.h (deflated 53%)
+updating: Jugador.h (deflated 52%)
+updating: Mazo.h (deflated 56%)
+updating: Partida.h (deflated 65%)
+updating: Tablero.h (deflated 64%)
+updating: Territorio.h (deflated 65%)
+updating: Tipos.h (deflated 51%)
+updating: Turno.h (deflated 63%)
+updating: Ataque.cpp (deflated 75%)
+updating: Carta.cpp (deflated 59%)
+updating: Comandos.cpp (deflated 75%)
+updating: Continente.cpp (deflated 72%)
+updating: Dados.cpp (deflated 63%)
+updating: Entrega0_Risk.cpp (deflated 82%)
+updating: Jugador.cpp (deflated 64%)
+updating: Mazo.cpp (deflated 73%)
+updating: Partida.cpp
