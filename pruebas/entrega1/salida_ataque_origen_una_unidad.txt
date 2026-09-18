@@ -1,0 +1,197 @@
+Script started on 2026-09-09 23:15:38-05:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="184" LINES="45"]
+[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ [7mg++ -std=c++17 *.cpp[27mg++ -std=c++17 *.cpp
+[?2004l[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ [7m./a.out[27m./a.out
+[?2004l$ inicializar prueba_origen_una_unidad.txt
+(Comando correcto) El juego se ha inicializado correctamente.
+$ obtener_unidades Isa
+Unidades disponibles: 4
+Escriba el codigo del territorio y la cantidad de unidades: 1.5 4
+Unidades restantes: 0
+(Comando correcto) El jugador Isa ha terminado de reclamar y ubicar sus unidades.
+$ atacar Isa
+Desea realizar un ataque? (s/n): s
+========== TABLERO ==========
+Continente: America del Norte
+  Territorio: Alaska
+    Codigo: 1.1
+    Propietario: verde
+    Unidades: 3
+  Territorio: Alberta
+    Codigo: 1.2
+    Propietario: azul
+    Unidades: 1
+  Territorio: America Central
+    Codigo: 1.3
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Estados Unidos Orientales
+    Codigo: 1.4
+    Propietario: verde
+    Unidades: 3
+  Territorio: Groenlandia
+    Codigo: 1.5
+    Propietario: azul
+    Unidades: 9
+  Territorio: Territorio Noroccidental
+    Codigo: 1.6
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Ontario
+    Codigo: 1.7
+    Propietario: verde
+    Unidades: 3
+  Territorio: Quebec
+    Codigo: 1.8
+    Propietario: azul
+    Unidades: 3
+  Territorio: Estados Unidos Occidentales
+    Codigo: 1.9
+    Propietario: rojo
+    Unidades: 3
+Continente: America del Sur
+  Territorio: Argentina
+    Codigo: 2.1
+    Propietario: verde
+    Unidades: 3
+  Territorio: Brasil
+    Codigo: 2.2
+    Propietario: azul
+    Unidades: 3
+  Territorio: Peru
+    Codigo: 2.3
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Venezuela
+    Codigo: 2.4
+    Propietario: verde
+    Unidades: 3
+Continente: Europa
+  Territorio: Gran Bretana
+    Codigo: 3.1
+    Propietario: azul
+    Unidades: 3
+  Territorio: Islandia
+    Codigo: 3.2
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Europa del Norte
+    Codigo: 3.3
+    Propietario: verde
+    Unidades: 3
+  Territorio: Escandinavia
+    Codigo: 3.4
+    Propietario: azul
+    Unidades: 3
+  Territorio: Europa del Sur
+    Codigo: 3.5
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Ucrania
+    Codigo: 3.6
+    Propietario: verde
+    Unidades: 3
+  Territorio: Europa Occidental
+    Codigo: 3.7
+    Propietario: azul
+    Unidades: 3
+Continente: Africa
+  Territorio: Congo
+    Codigo: 4.1
+    Propietario: rojo
+    Unidades: 3
+  Territorio: Africa Oriental
+    Codigo: 4.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: Egipto
+    Codigo: 4.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Madagascar
+    Codigo: 4.4
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Africa del Norte
+    Codigo: 4.5
+    Propietario: verde
+    Unidades: 2
+  Territorio: Africa del Sur
+    Codigo: 4.6
+    Propietario: azul
+    Unidades: 2
+Continente: Asia
+  Territorio: Afghanistan
+    Codigo: 5.1
+    Propietario: rojo
+    Unidades: 2
+  Territorio: China
+    Codigo: 5.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: India
+    Codigo: 5.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Irkutsk
+    Codigo: 5.4
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Japon
+    Codigo: 5.5
+    Propietario: verde
+    Unidades: 2
+  Territorio: Kamchatka
+    Codigo: 5.6
+    Propietario: azul
+    Unidades: 2
+  Territorio: Medio Oriente
+    Codigo: 5.7
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Mongolia
+    Codigo: 5.8
+    Propietario: verde
+    Unidades: 2
+  Territorio: Siam
+    Codigo: 5.9
+    Propietario: azul
+    Unidades: 2
+  Territorio: Siberia
+    Codigo: 5.10
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Ural
+    Codigo: 5.11
+    Propietario: verde
+    Unidades: 2
+  Territorio: Yakutsk
+    Codigo: 5.12
+    Propietario: azul
+    Unidades: 2
+Continente: Oceania
+  Territorio: Australia Oriental
+    Codigo: 6.1
+    Propietario: rojo
+    Unidades: 2
+  Territorio: Indonesia
+    Codigo: 6.2
+    Propietario: verde
+    Unidades: 2
+  Territorio: Nueva Guinea
+    Codigo: 6.3
+    Propietario: azul
+    Unidades: 2
+  Territorio: Australia Occidental
+    Codigo: 6.4
+    Propietario: rojo
+    Unidades: 2
+Ingrese el codigo del territorio desde el que desea atacar: 1.2
+Ingrese el codigo del territorio que desea atacar: 1.1
+La configuracion del ataque no es valida.
+Desea realizar un ataque? (s/n): n
+(Comando correcto) El jugador Isa ha terminado de atacar.
+$ salr ir
+[?2004h]0;isa21087@isa21087-Nitro-ANV15-51: ~/Proyecto Estructuras[01;32misa21087@isa21087-Nitro-ANV15-51[00m:[01;34m~/Proyecto Estructuras[00m$ exit
+[?2004lexit
+
+Script done on 2026-09-09 23:16:24-05:00 [COMMAND_EXIT_CODE="0"]
