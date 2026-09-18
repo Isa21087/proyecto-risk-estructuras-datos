@@ -1,8 +1,9 @@
 # Contribuir al Proyecto RISK
 
-Gracias por contribuir al proyecto **RISK** de la asignatura **Estructuras de Datos**.
 
-Este archivo define cómo organizar los cambios del equipo para que el código, la documentación y las ramas se mantengan coherentes durante la Entrega 1.
+Este archivo define cómo organizar el trabajo del equipo durante el desarrollo completo del proyecto, incluyendo código, documentación, pruebas, ramas, commits y entregas.
+
+El objetivo es mantener una implementación coherente, organizada y fácil de entender y sustentar por todos los integrantes.
 
 ---
 
@@ -10,25 +11,76 @@ Este archivo define cómo organizar los cambios del equipo para que el código, 
 
 El proyecto implementa en C++ una versión por consola del juego **RISK**.
 
-En la Entrega 1, el trabajo se concentra en el **Componente 1**, encargado de:
+El desarrollo es incremental y está dividido en tres componentes principales:
 
-- inicializar una partida desde un archivo;
-- administrar jugadores y turnos;
-- consultar y actualizar el tablero;
-- obtener y ubicar unidades;
-- realizar ataques entre territorios vecinos;
-- fortificar territorios propios;
-- mostrar el estado actual de la partida;
-- detectar cuándo un jugador controla los 42 territorios;
-- finalizar correctamente la ejecución del programa.
+- **Componente 1:** configuración y desarrollo del juego mediante estructuras lineales.
+- **Componente 2:** almacenamiento y recuperación de partidas mediante estructuras jerárquicas y codificación de Huffman.
+- **Componente 3:** estrategias de juego mediante estructuras no lineales, específicamente grafos.
 
-Las misiones no hacen parte del alcance actual.
+Cada nueva entrega debe conservar, corregir y completar las funcionalidades desarrolladas anteriormente.
 
-Las cartas y el mazo corresponden a una funcionalidad adicional y solo deben desarrollarse si el equipo decide implementar esa bonificación.
+Por esta razón, el código, la documentación, los diagramas y las pruebas deben representar siempre el estado actual completo del proyecto.
 
 ---
 
-## 2. Módulos principales
+## 2. Componentes del proyecto
+
+### Componente 1: configuración del juego
+
+Incluye las funcionalidades relacionadas con el desarrollo normal de una partida:
+
+- inicializar una partida desde un archivo;
+- administrar jugadores;
+- administrar turnos;
+- consultar y actualizar el tablero;
+- obtener y ubicar unidades;
+- realizar ataques;
+- fortificar territorios;
+- mostrar el estado actual de la partida;
+- detectar la condición de victoria;
+- finalizar correctamente la ejecución.
+
+Comandos principales:
+
+```text
+inicializar
+obtener_unidades
+atacar
+fortificar
+estado_juego
+salir
+```
+
+### Componente 2: almacenamiento de partidas
+
+Permite almacenar y recuperar el estado de una partida.
+
+Debe utilizar estructuras jerárquicas y el algoritmo de codificación de **Huffman**.
+
+Comandos principales:
+
+```text
+guardar
+guardar_comprimido
+inicializar
+```
+
+El comando `inicializar` debe poder trabajar tanto con partidas almacenadas normalmente como con archivos comprimidos cuando esta funcionalidad haya sido implementada.
+
+### Componente 3: estrategias de juego
+
+Utiliza **grafos** para ayudar al jugador a tomar decisiones relacionadas con la conquista de territorios.
+
+Comandos principales:
+
+```text
+costo_conquista
+conquista_mas_barata
+```
+
+---
+
+## 3. Módulos y TAD principales
 
 El proyecto se divide en TAD relacionados entre sí.
 
@@ -36,7 +88,12 @@ El proyecto se divide en TAD relacionados entre sí.
 
 Representa un territorio del tablero.
 
-Debe almacenar la información necesaria para identificarlo, conocer su propietario, administrar sus unidades y representar sus relaciones con otros territorios cuando corresponda.
+Administra la información necesaria para:
+
+- identificar el territorio;
+- conocer su propietario;
+- almacenar la cantidad de unidades;
+- consultar sus relaciones con otros territorios cuando corresponda.
 
 ### `Continente`
 
@@ -63,21 +120,24 @@ Tablero
 
 No se debe mantener otra secuencia independiente de territorios dentro de `Tablero`, porque esto podría generar dos fuentes de información diferentes sobre el mismo territorio.
 
+Cuando se implemente el Componente 3, las relaciones entre territorios también serán utilizadas para representar y consultar el grafo del tablero.
+
 ### `Jugador`
 
 Representa a un jugador de la partida.
 
-Actualmente administra:
+Administra principalmente:
 
 - nombre;
 - color;
-- cartas obtenidas durante la partida.
+- cartas obtenidas durante la partida;
+- información necesaria para conocer su estado dentro del juego.
 
 ### `Partida`
 
 Coordina el funcionamiento general del juego.
 
-Relaciona:
+Relaciona principalmente:
 
 - jugadores;
 - tablero;
@@ -88,25 +148,35 @@ Relaciona:
 - estado de finalización;
 - ganador.
 
-Las operaciones principales del Componente 1 se coordinan desde este TAD.
+Las operaciones principales del sistema deben coordinarse desde este TAD cuando corresponda.
 
 ### `Turno`
 
-Controla qué jugador tiene el turno actual y la etapa correspondiente.
+Controla:
 
-La forma definitiva de seleccionar el primer jugador al inicializar desde archivo debe mantenerse pendiente hasta que exista una confirmación del profesor.
+- qué jugador tiene el turno actual;
+- qué etapa del turno se está ejecutando.
+
+Las etapas deben respetar el flujo definido para:
+
+```text
+obtener unidades
+→ atacar
+→ fortificar
+→ siguiente jugador
+```
 
 ### `Dados`
 
 Se encarga de los dados utilizados durante un ataque.
 
-Actualmente permite:
+Permite:
 
 - lanzar una cantidad de dados;
-- guardar los resultados;
-- ordenarlos de mayor a menor;
-- consultar todos los resultados;
-- obtener los resultados mayores;
+- almacenar los resultados;
+- ordenarlos;
+- consultar los resultados;
+- obtener los valores necesarios para realizar las comparaciones;
 - limpiar el lanzamiento anterior.
 
 ### `Ataque`
@@ -120,37 +190,107 @@ Depende principalmente de:
 - `Territorio`;
 - `Dados`.
 
-No se deben agregar reglas de ataque que no estén confirmadas por el enunciado o por el profesor.
+Las reglas implementadas deben corresponder al enunciado o a aclaraciones directas del profesor.
 
 ### `Carta` y `Mazo`
 
-Pertenecen a la funcionalidad adicional de cartas.
+Administran las cartas utilizadas dentro del juego.
 
-No deben condicionar el funcionamiento obligatorio del Componente 1.
+Su funcionamiento debe mantenerse coherente con las reglas de obtención e intercambio de cartas que correspondan al estado actual del proyecto.
+
+### Estructuras de Huffman
+
+Para el Componente 2 se deberán utilizar las estructuras necesarias para:
+
+- calcular frecuencias;
+- construir el árbol de Huffman;
+- generar códigos;
+- codificar información;
+- decodificar información;
+- guardar y recuperar archivos comprimidos.
+
+Los TAD concretos utilizados deben corresponder al diseño implementado por el grupo.
+
+### Grafo
+
+Para el Componente 3 se utilizará una representación de grafo que permita analizar los territorios y sus conexiones.
+
+Debe permitir implementar las operaciones necesarias para:
+
+```text
+costo_conquista
+conquista_mas_barata
+```
+
+La estructura definitiva debe corresponder al diseño realizado por el equipo y a los conceptos vistos en clase.
 
 ---
 
-## 3. Organización del trabajo
+## 4. Organización del trabajo
 
 Antes de modificar un módulo:
 
 1. Revisar su archivo `.h`.
 2. Revisar los TAD de los que depende.
-3. Confirmar que la operación esté dentro del alcance de la entrega.
-4. Verificar si existe alguna regla pendiente de respuesta del profesor.
-5. Mantener coherencia entre código, documentación, diagramas y pruebas.
+3. Revisar el enunciado correspondiente.
+4. Confirmar que la operación pertenece al alcance actual.
+5. Revisar si existe alguna aclaración del profesor relacionada con esa funcionalidad.
+6. Mantener coherencia entre código, documentación, diagramas y pruebas.
 
 No se debe modificar la interfaz de otro TAD únicamente para hacer funcionar una implementación incorrecta.
 
-Si una función necesita una operación que todavía no existe, primero se debe revisar si esa operación pertenece realmente al diseño del TAD.
+Si una función necesita una operación que todavía no existe, primero se debe revisar si esa operación realmente pertenece al diseño del TAD correspondiente.
 
 ---
 
-## 4. Convenciones de código
+## 5. Organización del repositorio
+
+La organización general debe mantenerse aproximadamente así:
+
+```text
+Proyecto Estructuras/
+│
+├── .github/
+│   └── CONTRIBUTING.md
+│
+├── documentacion/
+│   ├── entrega2/
+│   └── entrega3/
+│
+├── pruebas/
+│   ├── entrega1/
+│   ├── entrega2/
+│   └── entrega3/
+│
+├── entregas/
+│
+├── scripts/
+│   └── generar_entrega.sh
+│
+├── .gitignore
+├── main.cpp
+├── *.cpp
+├── *.h
+└── archivos necesarios para ejecutar el programa
+```
+
+### Archivos especiales
+
+`.gitignore` debe permanecer en la raíz del repositorio.
+
+Los scripts auxiliares deben almacenarse en:
+
+```text
+scripts/
+```
+
+La carpeta `.github/` se utiliza para archivos relacionados con la organización del repositorio en GitHub.
+
+---
+
+## 6. Convenciones de código
 
 El proyecto utiliza **C++17**.
-
-### Estilo general
 
 Se debe mantener:
 
@@ -158,13 +298,7 @@ Se debe mantener:
 using namespace std;
 ```
 
-No se deben agregar librerías, construcciones de C++ o técnicas nuevas sin explicar primero:
-
-- qué hacen;
-- por qué son necesarias;
-- por qué no basta con lo que ya usa el proyecto.
-
-Se prefieren soluciones sencillas, explícitas y fáciles de defender durante la sustentación.
+Se prefieren soluciones sencillas, explícitas y fáciles de explicar durante la sustentación.
 
 Cuando sea posible, utilizar:
 
@@ -172,20 +306,30 @@ Cuando sea posible, utilizar:
 - ciclos `while`;
 - condiciones claras;
 - `vector`;
-- operaciones básicas de STL vistas en clase.
+- estructuras vistas en clase;
+- operaciones básicas de STL conocidas por el equipo.
+
+No se deben agregar construcciones, librerías o técnicas nuevas sin entender primero:
+
+- qué hacen;
+- por qué son necesarias;
+- qué problema solucionan;
+- por qué son apropiadas para este proyecto.
 
 Evitar introducir sin justificación:
 
 - `auto`;
 - lambdas;
-- algoritmos de STL para reemplazar lógica que el grupo debe implementar;
-- conversiones avanzadas;
-- estructuras adicionales que no hagan parte del diseño;
+- algoritmos avanzados de STL;
+- conversiones innecesariamente complejas;
+- estructuras adicionales que no correspondan al diseño;
 - librerías incluidas únicamente por comodidad.
+
+Todo integrante debe poder explicar el código que entrega.
 
 ---
 
-## 5. Encabezados e implementación
+## 7. Encabezados e implementación
 
 Cada TAD debe mantener separadas su interfaz y su implementación:
 
@@ -194,10 +338,10 @@ NombreTAD.h
 NombreTAD.cpp
 ```
 
-El archivo `.h` contiene:
+El archivo `.h` contiene principalmente:
 
 - estado del TAD;
-- prototipos de sus operaciones.
+- prototipos de las operaciones.
 
 El archivo `.cpp` contiene:
 
@@ -205,21 +349,17 @@ El archivo `.cpp` contiene:
 
 Las firmas del `.cpp` deben coincidir exactamente con las declaradas en el `.h`.
 
-No se deben crear funciones nuevas en el `.cpp` sin revisar primero si pertenecen al diseño.
+No se deben crear operaciones públicas nuevas sin revisar primero si corresponden al diseño del TAD.
 
 ---
 
-## 6. Comentarios
+## 8. Comentarios
 
-Los comentarios deben explicar decisiones importantes y partes que no sean obvias.
+Los comentarios deben explicar decisiones importantes y partes que no sean evidentes.
 
-Usar comentarios con:
+Usar comentarios naturales y concretos.
 
-```cpp
-//
-```
-
-Ejemplo recomendado:
+Ejemplo:
 
 ```cpp
 // Ordena los resultados de mayor a menor porque primero se comparan los dados mas altos.
@@ -231,66 +371,168 @@ Otro ejemplo:
 // Se recibe por referencia para evitar copiar toda la carta y const evita modificarla.
 ```
 
-Evitar comentarios demasiado formales o artificiales, por ejemplo:
+Evitar comentarios artificiales o innecesariamente formales.
 
-```cpp
-// Esto es necesario debido a que el sistema requiere efectuar la posterior comparacion de los valores obtenidos.
-```
+También se debe evitar comentar instrucciones evidentes como:
 
-También se debe evitar comentar instrucciones evidentes como cada `return`, llave o asignación simple.
+- cada `return`;
+- cada asignación;
+- cada llave;
+- operaciones cuyo propósito ya es claro por el nombre de la función.
 
 ---
 
-## 7. Reglas del juego que no se deben cambiar
+## 9. Reglas del juego
 
-Hasta que exista una nueva aclaración del profesor:
+Las reglas implementadas deben provenir de:
+
+1. aclaraciones directas del profesor;
+2. enunciado oficial;
+3. material trabajado en clase.
+
+Entre las reglas actualmente utilizadas se encuentran:
 
 - después de una fortificación debe quedar mínimo una unidad en el territorio de origen;
-- después de conquistar un territorio se debe mover al menos una unidad al territorio conquistado;
-- el territorio de origen tampoco puede quedar vacío;
-- un jugador gana cuando controla los 42 territorios;
+- después de conquistar un territorio se deben trasladar unidades al territorio conquistado;
+- el territorio atacante no puede quedar vacío;
+- un jugador puede ganar al controlar los 42 territorios según la modalidad implementada;
 - en un empate de dados gana el defensor;
-- el ataque utiliza hasta tres dados del atacante y hasta dos del defensor según la lógica que finalmente sea confirmada;
-- no se debe inventar una cantidad mínima definitiva de unidades para iniciar o continuar un ataque mientras esa regla siga pendiente de confirmación.
+- únicamente se pueden atacar territorios vecinos;
+- la fortificación se realiza entre territorios propios permitidos por las reglas.
 
-Cuando una regla no esté confirmada, se debe marcar como **pendiente** y no implementarla como decisión final.
+No se deben inventar reglas cuando exista una duda.
+
+Cuando una condición todavía no haya sido confirmada, debe mantenerse como **pendiente** hasta obtener una respuesta del profesor.
 
 ---
 
-## 8. Flujo de ramas
+## 10. Flujo de ramas
 
-Las ramas principales son:
+La rama principal del proyecto es:
 
-- `main`: versión principal protegida;
-- `develop`: rama de integración protegida.
+```text
+main
+```
 
-El trabajo nuevo debe realizarse en ramas separadas.
+`main` representa la versión estable del proyecto y se encuentra protegida.
+
+No se debe trabajar directamente sobre `main`.
+
+Todo cambio debe realizarse primero en una rama separada y luego integrarse mediante Pull Request.
+
+### Nombre de las ramas
+
+Todas las ramas deben indicar:
+
+1. el tipo de trabajo;
+2. la persona responsable;
+3. la tarea o módulo.
+
+Formato:
+
+```text
+tipo/nombre-tarea
+```
+
+Los nombres utilizados por el equipo son:
+
+```text
+isabella
+saul
+alejandro
+```
+
+### Nuevas funcionalidades
+
+Formato:
+
+```text
+feature/nombre-tarea
+```
 
 Ejemplos:
 
 ```text
-feature/nombre-funcionalidad
-fix/nombre-correccion
-docs/nombre-documentacion
+feature/isabella-huffman
+feature/saul-guardar-comprimido
+feature/alejandro-inicializar-binario
 ```
 
-Ejemplos aplicados al proyecto:
+### Correcciones
+
+Formato:
 
 ```text
-feature/isabella-jugador-partida
-feature/saul-modelo-mapa
-fix/isabella-dados-ataque
+fix/nombre-tarea
 ```
 
-No se debe trabajar directamente sobre `main` ni mezclar cambios no relacionados dentro de una misma rama.
+Ejemplos:
+
+```text
+fix/isabella-ataque
+fix/saul-tablero
+fix/alejandro-turno
+```
+
+### Documentación
+
+Formato:
+
+```text
+docs/nombre-tarea
+```
+
+Ejemplos:
+
+```text
+docs/isabella-diseno-entrega2
+docs/saul-plan-pruebas
+docs/alejandro-diagrama-tads
+```
+
+### Organización y mantenimiento
+
+Formato:
+
+```text
+chore/nombre-tarea
+```
+
+Ejemplos:
+
+```text
+chore/isabella-preparar-entrega3
+chore/saul-organizar-pruebas
+```
+
+### Reglas para las ramas
+
+- Usar siempre `isabella`, `saul` o `alejandro` como responsable.
+- Escribir todo en minúsculas.
+- No utilizar espacios.
+- No utilizar tildes.
+- Separar palabras mediante guiones.
+- Una rama debe corresponder a una tarea concreta.
+- No mezclar cambios diferentes dentro de una misma rama.
+- No trabajar directamente sobre `main`.
+
+Antes de empezar una tarea nueva:
+
+```bash
+git switch main
+git pull origin main
+git switch -c feature/isabella-nombre-tarea
+```
+
+Cambiar `feature` por `fix`, `docs` o `chore` cuando corresponda.
 
 ---
 
-## 9. Commits
+## 11. Commits
 
 Cada commit debe representar un cambio claro y relacionado.
 
-Para mantener los mensajes organizados, se usará el siguiente formato:
+Formato:
 
 ```text
 tipo(modulo): descripcion breve
@@ -298,20 +540,18 @@ tipo(modulo): descripcion breve
 
 ### Tipos de commit
 
-| Tipo | Cuándo usarlo |
+| Tipo | Uso |
 |---|---|
-| `feat` | Cuando se agrega una funcionalidad nueva. |
-| `fix` | Cuando se corrige un error o comportamiento incorrecto. |
-| `docs` | Cuando solamente cambia documentación. |
-| `test` | Cuando se agregan o modifican pruebas. |
-| `refactor` | Cuando se reorganiza código sin cambiar su comportamiento esperado. |
-| `chore` | Para tareas de mantenimiento del repositorio que no cambian la lógica del programa. |
+| `feat` | Nueva funcionalidad |
+| `fix` | Corrección de un error |
+| `docs` | Cambios únicamente de documentación |
+| `test` | Creación o modificación de pruebas |
+| `refactor` | Reorganización de código sin cambiar su comportamiento |
+| `chore` | Organización o mantenimiento del repositorio |
 
 ### Módulo o alcance
 
-Dentro de los paréntesis se indica la parte del proyecto que cambia.
-
-Ejemplos de módulos:
+Ejemplos:
 
 ```text
 jugador
@@ -324,213 +564,227 @@ dados
 ataque
 carta
 mazo
+huffman
+grafo
 main
 docs
 repo
 ```
 
-Si un commit afecta principalmente un solo TAD, se debe utilizar ese TAD como módulo.
-
-### Ejemplos para este proyecto
-
-Nueva funcionalidad en `Tablero`:
+### Ejemplos
 
 ```text
 feat(tablero): implementar busqueda de territorios
 ```
-
-Implementación de relaciones del mapa:
-
-```text
-feat(tablero): agregar consulta de vecindad entre territorios
-```
-
-Nueva operación de `Territorio`:
 
 ```text
 feat(territorio): implementar manejo de unidades
 ```
 
-Nueva funcionalidad en `Jugador`:
-
-```text
-feat(jugador): implementar operaciones basicas del jugador
-```
-
-Nueva funcionalidad en `Partida`:
-
-```text
-feat(partida): implementar estado basico de la partida
-```
-
-Corrección de la búsqueda de jugadores:
-
 ```text
 fix(partida): corregir busqueda de jugadores
 ```
-
-Implementación de dados:
 
 ```text
 feat(dados): implementar lanzamiento y manejo de resultados
 ```
 
-Corrección de dados:
-
-```text
-fix(dados): corregir ordenamiento de resultados
-```
-
-Implementación de ataque:
-
-```text
-feat(ataque): implementar validaciones basicas del ataque
-```
-
-Corrección relacionada con conquista:
-
 ```text
 fix(ataque): corregir traslado de unidades al conquistar
 ```
 
-Pruebas del comando atacar:
-
 ```text
-test(ataque): agregar casos de prueba de configuracion invalida
+feat(huffman): implementar calculo de frecuencias
 ```
 
-Documentación de TAD:
-
 ```text
-docs(tads): documentar jugador partida y dados
+feat(huffman): construir arbol de codificacion
 ```
 
-Actualización del diagrama:
-
 ```text
-docs(diagrama): actualizar relaciones entre tads
+feat(grafo): implementar representacion del tablero
 ```
 
-Cambio interno que no modifica el comportamiento:
-
 ```text
-refactor(partida): simplificar busqueda de jugadores
+test(ataque): agregar casos de configuracion invalida
 ```
 
-Limpieza de archivos duplicados del repositorio:
-
 ```text
-chore(repo): eliminar archivos duplicados
+test(huffman): agregar pruebas de guardar comprimido
 ```
 
-Actualización del archivo de contribución:
+```text
+docs(tads): actualizar descripcion de estructuras
+```
 
 ```text
 docs(repo): actualizar guia de contribucion
 ```
 
-### Reglas para escribir los mensajes
-
-- Usar el tipo en minúscula: `feat`, `fix`, `docs`, etc.
-- Escribir el módulo entre paréntesis.
-- Después de los dos puntos, escribir una descripción corta y concreta.
-- El mensaje debe decir qué cambió, no frases genéricas como `cambios`, `arreglos` o `update`.
-- Un commit debe contener cambios relacionados entre sí.
-- Si se están modificando módulos diferentes por razones diferentes, es preferible separarlos en commits distintos.
-
-Ejemplo recomendado:
-
 ```text
-feat(tablero): implementar busqueda de territorios
+chore(repo): preparar estructura para entrega 3
 ```
 
-Evitar:
+### Reglas para commits
+
+- Usar el tipo en minúscula.
+- Indicar el módulo entre paréntesis.
+- Escribir después de `:` una descripción corta.
+- Indicar qué cambió.
+- No utilizar mensajes genéricos.
+- Mantener cambios relacionados en el mismo commit.
+- Separar cambios diferentes en commits distintos.
+
+Evitar mensajes como:
 
 ```text
 cambios
 ```
 
 ```text
-fix: cosas del tablero
+update
 ```
 
 ```text
-update final ahora si
+arreglos finales
 ```
 
-Antes de crear un commit se debe comprobar que solamente estén incluidos los archivos relacionados con ese cambio.
+```text
+ahora si
+```
 
-## 10. Pull Requests
+Antes de realizar el commit:
 
-Los cambios deben integrarse a `develop` mediante Pull Request.
+```bash
+git status
+```
 
-Antes de solicitar la integración:
+y comprobar qué archivos se incluirán.
 
-- comprobar que la rama esté actualizada;
+---
+
+## 12. Pull Requests
+
+Todo cambio destinado a la versión estable debe integrarse a `main` mediante Pull Request.
+
+El flujo esperado es:
+
+```text
+rama de trabajo
+        ↓
+Pull Request
+        ↓
+main
+```
+
+Antes de crear un Pull Request:
+
+- comprobar que la tarea esté terminada;
 - revisar los archivos modificados;
-- compilar los `.cpp` afectados;
-- comprobar que no existan errores ni advertencias relevantes;
-- verificar que no se hayan incluido archivos ajenos al cambio;
-- revisar que código y documentación sean coherentes.
+- comprobar que el proyecto compile;
+- ejecutar las pruebas correspondientes;
+- verificar que no se incluyan archivos innecesarios;
+- comprobar que código y documentación sean coherentes.
 
-El Pull Request debe indicar brevemente:
+El Pull Request debe explicar brevemente:
 
-- qué módulo se modificó;
+- qué se modificó;
 - qué problema resuelve;
-- qué archivos fueron cambiados;
-- qué dependencias tiene;
+- qué archivos principales cambiaron;
+- si existen dependencias;
 - qué queda pendiente.
 
-Los cambios deben ser revisados por otro integrante antes de integrarse.
+Cuando sea posible, otro integrante debe revisar los cambios antes de integrarlos.
 
 ---
 
-## 11. Compilación
+## 13. Compilación
 
-Los archivos modificados deben comprobarse con C++17.
+El proyecto debe comprobarse utilizando C++17.
 
-La compilación debe realizarse con advertencias activadas:
+Compilación general:
 
-```text
--std=c++17 -Wall -Wextra -pedantic
+```bash
+g++ -std=c++17 *.cpp
 ```
 
-No se debe considerar terminado un módulo únicamente porque su archivo compila de forma aislada.
+Para una revisión más estricta se puede utilizar:
 
-Cuando las dependencias estén disponibles, también se debe comprobar que el proyecto completo compile y enlace correctamente.
+```bash
+g++ -std=c++17 -Wall -Wextra -pedantic *.cpp
+```
 
----
+Luego ejecutar:
 
-## 12. Pruebas
+```bash
+./a.out
+```
 
-Las pruebas deben comprobar tanto casos válidos como inválidos.
+No se debe considerar terminado un módulo únicamente porque su archivo `.cpp` compile de forma aislada.
 
-Para el comando `atacar` se deben considerar, entre otros:
-
-- territorio de origen inexistente;
-- territorio de destino inexistente;
-- territorio de origen que no pertenece al jugador;
-- territorio de destino propio;
-- territorios que no son vecinos;
-- unidades insuficientes;
-- pérdida de unidades del atacante;
-- pérdida de unidades del defensor;
-- empate de dados;
-- conquista de territorio;
-- traslado de unidades después de conquistar;
-- condición de victoria.
-
-No se deben inventar resultados obtenidos.
-
-Primero se define el resultado esperado, luego se ejecuta el programa y finalmente se registra el resultado real.
+También debe comprobarse que el proyecto completo compile y enlace correctamente.
 
 ---
 
-## 13. Documentación y diagrama de TAD
+## 14. Pruebas
 
-La documentación del proyecto debe mantenerse sincronizada con el código.
+Las pruebas deben comprobar casos válidos e inválidos.
 
-Cada TAD documentado en el informe debe incluir:
+No se deben inventar resultados.
+
+El procedimiento recomendado es:
+
+1. definir el caso;
+2. definir el resultado esperado;
+3. ejecutar el programa;
+4. registrar el resultado obtenido;
+5. comparar ambos resultados.
+
+### Entrega 1
+
+El plan de pruebas se concentra principalmente en:
+
+```text
+atacar
+```
+
+### Entrega 2
+
+El plan de pruebas debe incluir:
+
+```text
+guardar_comprimido
+```
+
+### Entrega 3
+
+El plan de pruebas debe incluir:
+
+```text
+costo_conquista
+```
+
+Las pruebas utilizadas en cada entrega deben almacenarse en su carpeta correspondiente:
+
+```text
+pruebas/entrega1/
+pruebas/entrega2/
+pruebas/entrega3/
+```
+
+---
+
+## 15. Documentación
+
+La documentación debe mantenerse sincronizada con la implementación.
+
+El documento de diseño es **incremental**.
+
+Esto significa que una nueva entrega no documenta únicamente lo nuevo, sino el estado completo del proyecto hasta ese momento.
+
+Cada TAD documentado debe seguir el formato solicitado en clase.
+
+Según corresponda, debe incluir:
 
 - descripción;
 - estado;
@@ -539,55 +793,52 @@ Cada TAD documentado en el informe debe incluir:
 - precondiciones;
 - poscondiciones.
 
-El diagrama de relación entre TAD de `draw.io` **no es un diagrama UML de clases**.
+También se deben incluir los diagramas o esquemáticos solicitados para explicar el funcionamiento de las operaciones principales.
 
-Por lo tanto, no se deben agregar:
+La documentación correspondiente a cada entrega debe almacenarse en:
+
+```text
+documentacion/entrega2/
+documentacion/entrega3/
+```
+
+---
+
+## 16. Diagrama de relación entre TAD
+
+El diagrama de relación entre TAD utilizado en el proyecto **no es un diagrama UML de clases**.
+
+No se deben agregar elementos propios de UML que no hayan sido solicitados, como:
 
 - `public`;
 - `private`;
-- signos `+` o `-`;
+- signos `+` y `-`;
 - rombos de composición;
 - punteros;
 - referencias;
 - firmas completas de C++.
 
-En el diagrama se utiliza notación abstracta, por ejemplo:
+Utilizar notación abstracta.
+
+Ejemplos:
 
 ```text
-string        -> cadena de caracteres
-int           -> numerico entero
-bool          -> booleano
-void          -> vacio
-vector<T>     -> secuencia de T
+string      -> cadena de caracteres
+int         -> numerico entero
+bool        -> booleano
+void        -> vacio
+vector<T>   -> secuencia de T
 ```
 
----
-
-## 14. Uso de inteligencia artificial
-
-Si una parte del código o de la documentación fue desarrollada con apoyo de una herramienta de IA, debe registrarse de manera honesta según las instrucciones de la entrega.
-
-La IA puede utilizarse como apoyo para:
-
-- explicar conceptos de C++;
-- revisar lógica propuesta por el grupo;
-- detectar errores;
-- revisar redacción;
-- sugerir correcciones sobre código existente.
-
-Las sugerencias deben revisarse antes de incorporarlas.
-
-No se debe presentar como trabajo completamente propio una solución generada directamente por una herramienta externa.
-
-Cuando se consulte una construcción de C++ nueva, también debe quedar claro qué se investigó y por qué fue necesario utilizarla.
+El diagrama debe mostrar los TAD utilizados realmente por la implementación y sus relaciones.
 
 ---
 
-## 15. Dependencias entre módulos
+## 17. Dependencias entre módulos
 
-Antes de trabajar en un módulo, revisar sus dependencias.
+Antes de modificar un módulo se deben revisar sus dependencias.
 
-Actualmente, la relación principal es:
+La relación general actual incluye:
 
 ```text
 Partida
@@ -599,43 +850,211 @@ Partida
 ├── Ataque
 │   └── Dados
 └── Mazo
+    └── Carta
 ```
 
-`Ataque` también necesita consultar y modificar información del `Tablero` y de los `Territorio`.
+`Ataque` también consulta y modifica información relacionada con `Tablero` y `Territorio`.
 
-Por esta razón, los cambios en `Territorio`, `Continente` o `Tablero` deben revisarse antes de cerrar definitivamente la implementación de `Ataque`.
+El Componente 2 agregará las estructuras necesarias para Huffman.
+
+El Componente 3 utilizará las relaciones entre territorios para trabajar con el grafo del tablero.
+
+Cuando cambie la implementación, esta sección también debe actualizarse.
 
 ---
 
-## 16. Antes de considerar un cambio terminado
+## 18. Organización de las entregas
+
+Las entregas anteriores deben conservarse como evidencia de lo que realmente fue entregado.
+
+No se deben modificar posteriormente los ZIP correspondientes a entregas ya realizadas.
+
+Los archivos finales se almacenan en:
+
+```text
+entregas/
+```
+
+Ejemplo:
+
+```text
+entregas/
+├── Entrega_1_Risk.zip
+├── Entrega_2_Risk.zip
+└── Entrega_3_Risk.zip
+```
+
+La documentación correspondiente a cada entrega debe mantenerse organizada en:
+
+```text
+documentacion/
+├── entrega2/
+└── entrega3/
+```
+
+Las pruebas deben almacenarse en:
+
+```text
+pruebas/
+├── entrega1/
+├── entrega2/
+└── entrega3/
+```
+
+Los scripts auxiliares se almacenan en:
+
+```text
+scripts/
+```
+
+Actualmente se utiliza:
+
+```text
+scripts/generar_entrega.sh
+```
+
+Este script permite generar de forma automática el archivo ZIP correspondiente a una entrega.
+
+### Uso del script de entrega
+
+Antes de utilizar el script por primera vez, se debe comprobar que tenga permiso de ejecución:
+
+```bash
+chmod +x scripts/generar_entrega.sh
+```
+
+Este permiso normalmente queda registrado en Git después de realizar el commit correspondiente, pero puede volver a aplicarse si fuera necesario.
+
+Para generar la Entrega 2:
+
+```bash
+./scripts/generar_entrega.sh 2
+```
+
+Para generar la Entrega 3:
+
+```bash
+./scripts/generar_entrega.sh 3
+```
+
+El script genera automáticamente el archivo correspondiente dentro de:
+
+```text
+entregas/
+```
+
+Por ejemplo:
+
+```text
+entregas/Entrega_2_Risk.zip
+```
+
+o:
+
+```text
+entregas/Entrega_3_Risk.zip
+```
+
+El ZIP debe contener únicamente los archivos necesarios para la entrega según las instrucciones vigentes del profesor.
+
+Actualmente el script incluye los archivos:
+
+```text
+*.cpp
+*.h
+*.txt
+```
+
+ubicados en la raíz del proyecto.
+
+No se deben incluir archivos compilados o temporales como:
+
+```text
+*.o
+*.exe
+a.out
+```
+
+Tampoco se deben incluir dentro del ZIP carpetas internas como:
+
+```text
+.git/
+.github/
+documentacion/
+pruebas/
+scripts/
+```
+
+La documentación final debe entregarse de la forma indicada por el profesor para la entrega correspondiente.
+
+Si existe una diferencia entre el enunciado escrito y una instrucción posterior dada directamente por el profesor, se debe seguir la instrucción más reciente confirmada.
+
+Antes de entregar se debe revisar manualmente el contenido del ZIP generado para comprobar que no falte ningún archivo necesario y que no se haya incluido información adicional por error.
+
+No se debe modificar manualmente un ZIP correspondiente a una entrega anterior.
+
+## 19. Uso de inteligencia artificial
+
+El uso de herramientas de inteligencia artificial debe seguir las instrucciones establecidas para el proyecto.
+
+Cuando una parte del código o de la documentación sea desarrollada con apoyo de IA, se debe identificar de manera honesta según lo solicitado por el profesor.
+
+Cuando corresponda, debe registrarse:
+
+- qué parte recibió apoyo de IA;
+- qué herramienta fue utilizada;
+- el prompt utilizado;
+- si el resultado fue modificado posteriormente por el equipo.
+
+El contenido generado con apoyo de IA no debe superar el límite definido por el enunciado de la asignatura.
+
+La IA puede utilizarse como apoyo para:
+
+- explicar conceptos;
+- revisar lógica;
+- detectar errores;
+- revisar redacción;
+- sugerir alternativas;
+- entender código existente.
+
+Las sugerencias deben ser revisadas, comprendidas y adaptadas antes de incorporarse.
+
+Todo integrante debe ser capaz de explicar durante la sustentación el código que presenta.
+
+---
+
+## 20. Antes de considerar una tarea terminada
 
 Comprobar:
 
+- [ ] Estoy trabajando en una rama diferente de `main`.
+- [ ] La rama contiene mi nombre.
 - [ ] El cambio pertenece al alcance actual.
+- [ ] Revisé el enunciado o la aclaración correspondiente.
 - [ ] El `.h` y el `.cpp` coinciden.
-- [ ] No se inventaron reglas.
-- [ ] No se agregaron librerías innecesarias.
-- [ ] Las construcciones nuevas fueron entendidas y justificadas.
-- [ ] Se mantiene `using namespace std;`.
+- [ ] No inventé reglas.
+- [ ] No agregué librerías innecesarias.
+- [ ] Entiendo cualquier construcción nueva utilizada.
 - [ ] El código puede explicarse durante la sustentación.
 - [ ] Los comentarios son claros y naturales.
-- [ ] El archivo compila con C++17.
-- [ ] Se probaron los casos relacionados con el cambio.
-- [ ] La documentación correspondiente fue revisada.
-- [ ] El commit contiene únicamente archivos relacionados.
-- [ ] El Pull Request tiene como destino `develop`.
+- [ ] El proyecto compila con C++17.
+- [ ] Probé los casos relacionados con mi cambio.
+- [ ] Revisé la documentación correspondiente.
+- [ ] `git status` contiene únicamente los archivos relacionados.
+- [ ] El commit tiene un mensaje claro.
+- [ ] El Pull Request tiene como destino `main`.
 
 ---
 
-## 17. Prioridad ante dudas
+## 21. Prioridad ante dudas
 
 Cuando exista una contradicción, utilizar este orden:
 
-1. Respuesta directa del profesor.
+1. Respuesta directa y reciente del profesor.
 2. Enunciado oficial del proyecto.
-3. Diapositivas y formato trabajado en clase.
+3. Diapositivas y material trabajado en clase.
 4. Diseño y decisiones confirmadas por el equipo.
 5. Reglas oficiales de RISK cuando el profesor indique aplicarlas.
-6. Sugerencias externas o de herramientas de IA.
+6. Sugerencias externas o herramientas de inteligencia artificial.
 
-Si todavía falta información, la decisión debe permanecer pendiente hasta ser confirmada.
+Si todavía falta información, la decisión debe permanecer como **pendiente** hasta ser confirmada.
