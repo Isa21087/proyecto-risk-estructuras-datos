@@ -98,20 +98,19 @@ bool Territorio::retirarUnidades(int cantidad, int minimoRestante){
 }
 
 bool Territorio::cambiarPropietario(string color, int cantidadAnadir){
-    //se verifica que ya no hayan unidades en el territorio
+
+    // El territorio solo puede conquistarse cuando ya no tiene unidades.
     if(unidades != 0){
         return false;
     }
 
-    //Se puede añadir una unidad en este territorio
-    if(cantidadAnadir <= 0 ){
+    // Se permite recibir cero unidades porque asi lo aclaro el profesor.
+    if(cantidadAnadir < 0){
         return false;
     }
 
-    //Se añade la unidad y se corona este territorio como conquistado
-    colorPropietario=color;
-    
-    agregarUnidades(cantidadAnadir);
-    
+    colorPropietario = color;
+    unidades = cantidadAnadir;
+
     return true;
 }

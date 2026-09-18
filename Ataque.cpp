@@ -266,9 +266,10 @@ ResultadoAtaque Ataque::ejecutar(
             // Debe quedar al menos una unidad en el origen.
             int maximoTraslado = origen->obtenerUnidades() - 1;
 
-            cout << "Puede trasladar entre 1 y "
-                 << maximoTraslado
-                 << " unidades al territorio conquistado." << endl;
+            // El profesor permitio trasladar desde cero unidades.
+            cout << "Puede trasladar entre 0 y "
+                << maximoTraslado
+                << " unidades al territorio conquistado." << endl;
 
             bool cantidadValida = false;
 
@@ -281,10 +282,10 @@ ResultadoAtaque Ataque::ejecutar(
                 // Si se cierra la entrada, completa la conquista con el minimo.
                 if(!getline(cin, linea)){
 
-                    cantidadTraslado = 1;
-                    cantidadValida = true;
+                    cantidadTraslado = 0;
+                        cantidadValida = true;
 
-                    cout << "La entrada fue cerrada. Se trasladara una unidad para completar la conquista." << endl;
+                        cout << "La entrada fue cerrada. No se trasladaran unidades." << endl;
 
                 }
                 else{
@@ -298,10 +299,10 @@ ResultadoAtaque Ataque::ejecutar(
                     else if(entrada >> datoExtra){
                         cout << "Debe escribir solo una cantidad entera." << endl;
                     }
-                    else if(cantidadTraslado < 1 ||
+                    else if(cantidadTraslado < 0 ||
                             cantidadTraslado > maximoTraslado){
 
-                        cout << "Ingrese una cantidad entre 1 y "
+                        cout << "Ingrese una cantidad entre 0 y "
                              << maximoTraslado << "." << endl;
 
                     }
@@ -313,8 +314,10 @@ ResultadoAtaque Ataque::ejecutar(
 
             }
 
-            //Se retiran primero las unidades del territorio origen.
-            origen->retirarUnidades(cantidadTraslado,1);
+            // Solo se retiran unidades cuando el jugador decide trasladar alguna.
+if(cantidadTraslado > 0){
+    origen->retirarUnidades(cantidadTraslado, 1);
+}
 
 
             //Se cambia el propietario del territorio conquistado

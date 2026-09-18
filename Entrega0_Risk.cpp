@@ -88,13 +88,11 @@ int main() {
                     }
 
                     //*Si el comando es salir se termina la ejecucion del programa*
-                    else if (comando == "salir") {
+                        else if (comando == "salir") {
 
-                        cout << "Finalizando el juego. Hasta pronto." << endl;
+                            continuar = false;
 
-                        continuar = false;
-
-                    }
+                        }
 
                     else if (comando == "inicializar") {
 
