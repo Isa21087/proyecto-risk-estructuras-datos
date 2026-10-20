@@ -139,18 +139,18 @@ int main()
 
                         EstadoComando resultado = partida.guardar(palabras[1]);
 
-                        // no intentamos guardar si todavia no hay partida
+                        // comprobamos si la partida ya fue inicializada
                         if (resultado == JUEGO_NO_INICIALIZADO)
                         {
-                            cout << "Esta partida no ha sido inicializada correctamente." << endl;
+                            cout << "(Juego no inicializado) Esta partida no ha sido inicializada correctamente." << endl;
                         }
                         else if (resultado == COMANDO_CORRECTO)
                         {
-                            cout << "La partida ha sido guardada correctamente." << endl;
+                            cout << "(Comando correcto) La partida ha sido guardada correctamente." << endl;
                         }
                         else
                         {
-                            cout << "La partida no ha sido guardada correctamente." << endl;
+                            cout << "(Error al guardar) La partida no ha sido guardada correctamente." << endl;
                         }
                     }
                     else if (comando == "guardar_comprimido")
@@ -159,21 +159,20 @@ int main()
                         EstadoComando resultado =
                             partida.guardarComprimido(palabras[1]);
 
-                        // los dos comandos deben comprobar si existe una partida
+                        // comprobamos si la partida ya fue inicializada
                         if (resultado == JUEGO_NO_INICIALIZADO)
                         {
-                            cout << "Esta partida no ha sido inicializada correctamente." << endl;
+                            cout << "(Juego no inicializado) Esta partida no ha sido inicializada correctamente." << endl;
                         }
                         else if (resultado == COMANDO_CORRECTO)
                         {
-                            cout << "La partida ha sido codificada y guardada correctamente." << endl;
+                            cout << "(Comando correcto) La partida ha sido codificada y guardada correctamente." << endl;
                         }
                         else
                         {
-                            cout << "La partida no ha sido codificada ni guardada correctamente." << endl;
+                            cout << "(Error al codificar y/o guardar) La partida no ha sido codificada ni guardada correctamente." << endl;
                         }
                     }
-
                     else if (comando == "estado_juego")
                     {
 
