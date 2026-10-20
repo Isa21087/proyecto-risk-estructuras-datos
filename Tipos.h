@@ -37,4 +37,10 @@ struct ResultadoAtaque {
     bool ataqueRealizado;
     bool conquistoTerritorio;
 };
+
+struct DatoHuffman {
+    unsigned char simbolo;
+    unsigned long long frecuencia;
+};
+
 #endif
