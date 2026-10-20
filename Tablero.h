@@ -1,20 +1,22 @@
+
 #ifndef TABLERO_H
 #define TABLERO_H
+
 #include <string>
 #include <vector>
 #include "Territorio.h"
 #include "Continente.h"
+
 using namespace std;
-class Tablero
-{
+
+class Tablero {
 private:
     vector<Continente> continentes;
-
 public:
     Tablero();
     void inicializarEstructura();
-    Territorio *buscarTerritorio(string codigo);
-    const Territorio *buscarTerritorio(string codigo) const;
+    Territorio* buscarTerritorio(string codigo);
+    const Territorio* buscarTerritorio(string codigo) const;
     bool existeTerritorio(string codigo) const;
     bool configurarTerritorio(string codigo, string colorPropietario, int unidades);
     bool sonVecinos(string codigoOrigen, string codigoDestino) const;
@@ -26,6 +28,7 @@ public:
     bool cambiarPropietario(string codigoTerritorio, string nuevoColor, int cantidad);
     bool todosLosTerritoriosConfigurados() const;
     void mostrarTablero() const;
+
     // devuelve las lineas de los territorios con codigo, propietario y unidades
     // mantiene el mismo orden en que estan organizados dentro del tablero
     string obtenerTextoTerritorios() const;

@@ -10,10 +10,10 @@
 #include "Mazo.h"
 using namespace std;
 
-class Partida
-{
+class Partida {
 
 private:
+
     // Guarda los jugadores que participan en la partida.
     vector<Jugador> jugadores;
 
@@ -43,6 +43,7 @@ private:
     string obtenerTextoPartida() const;
 
 public:
+
     // Crea una partida con su estado inicial.
     Partida();
 
