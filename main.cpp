@@ -130,6 +130,45 @@ int main() {
                         }
 
                     }
+                    else if (comando == "guardar")
+                    {
+
+                        EstadoComando resultado = partida.guardar(palabras[1]);
+
+                        // comprobamos si la partida ya fue inicializada
+                        if (resultado == JUEGO_NO_INICIALIZADO)
+                        {
+                            cout << "(Juego no inicializado) Esta partida no ha sido inicializada correctamente." << endl;
+                        }
+                        else if (resultado == COMANDO_CORRECTO)
+                        {
+                            cout << "(Comando correcto) La partida ha sido guardada correctamente." << endl;
+                        }
+                        else
+                        {
+                            cout << "(Error al guardar) La partida no ha sido guardada correctamente." << endl;
+                        }
+                    }
+                    else if (comando == "guardar_comprimido")
+                    {
+
+                        EstadoComando resultado =
+                            partida.guardarComprimido(palabras[1]);
+
+                        // comprobamos si la partida ya fue inicializada
+                        if (resultado == JUEGO_NO_INICIALIZADO)
+                        {
+                            cout << "(Juego no inicializado) Esta partida no ha sido inicializada correctamente." << endl;
+                        }
+                        else if (resultado == COMANDO_CORRECTO)
+                        {
+                            cout << "(Comando correcto) La partida ha sido codificada y guardada correctamente." << endl;
+                        }
+                        else
+                        {
+                            cout << "(Error al codificar y/o guardar) La partida no ha sido codificada ni guardada correctamente." << endl;
+                        }
+                    }
                     else if(comando == "estado_juego"){
 
                         EstadoComando resultado = partida.validarEstadoJuego();

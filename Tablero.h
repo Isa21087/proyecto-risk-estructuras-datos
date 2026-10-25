@@ -1,10 +1,14 @@
+
 #ifndef TABLERO_H
 #define TABLERO_H
+
 #include <string>
 #include <vector>
 #include "Territorio.h"
 #include "Continente.h"
+
 using namespace std;
+
 class Tablero {
 private:
     vector<Continente> continentes;
@@ -24,6 +28,9 @@ public:
     bool cambiarPropietario(string codigoTerritorio, string nuevoColor, int cantidad);
     bool todosLosTerritoriosConfigurados() const;
     void mostrarTablero() const;
+
+    // devuelve las lineas de los territorios con codigo, propietario y unidades
+    // mantiene el mismo orden en que estan organizados dentro del tablero
+    string obtenerTextoTerritorios() const;
 };
 #endif
-

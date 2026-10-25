@@ -10,7 +10,6 @@
 #include "Mazo.h"
 using namespace std;
 
-
 class Partida {
 
 private:
@@ -39,6 +38,10 @@ private:
     // Guarda el nombre del jugador que gano la partida.
     string ganador;
 
+    // arma el texto de la partida usando los jugadores y el tablero
+    // se reutilizara para guardar normal y guardar comprimido
+    string obtenerTextoPartida() const;
+
 public:
 
     // Crea una partida con su estado inicial.
@@ -46,6 +49,12 @@ public:
 
     // Inicializa la partida utilizando la informacion de un archivo.
     EstadoComando inicializar(string nombreArchivo);
+
+    // guarda la informacion actual del juego en un archivo de texto
+    EstadoComando guardar(string nombreArchivo) const;
+
+    // guarda el mismo contenido de la partida pero codificado con Huffman
+    EstadoComando guardarComprimido(string nombreArchivo) const;
 
     // Calcula y permite ubicar las unidades que puede reclamar un jugador.
     EstadoComando obtenerUnidades(string nombreJugador);

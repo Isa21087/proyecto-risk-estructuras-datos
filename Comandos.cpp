@@ -15,6 +15,22 @@ const vector<DatosComando> TABLA_COMANDOS = {
      "inicializar [nombre_archivo]",
      "inicializar partida.txt"},
 
+    {"guardar",
+     "CONFIGURACION DEL JUEGO",
+     1,
+     1,
+     "Guarda el estado actual de la partida en un archivo de texto.",
+     "guardar [nombre_archivo]",
+     "guardar partida_guardada.txt"},
+
+    {"guardar_comprimido",
+     "CONFIGURACION DEL JUEGO",
+     1,
+     1,
+     "Guarda el estado actual de la partida en un archivo binario comprimido con Huffman.",
+     "guardar_comprimido [nombre_archivo]",
+     "guardar_comprimido partida_guardada.bin"},
+
     {"obtener_unidades",
      "CONFIGURACION DEL JUEGO",
      1,
