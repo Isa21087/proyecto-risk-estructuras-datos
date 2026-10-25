@@ -4,6 +4,40 @@
 
 using namespace std;
 
+// USO DE IA - IMPLEMENTACION DE HUFFMAN
+//
+// Base academica:
+// Diapositivas 08-Arboles Binarios, 11-Monticulos y
+// 13-Expresion y Codificacion, junto con las plantillas
+// de arboles y monticulos trabajadas en clase.
+//
+// Referencias tecnicas para la adaptacion a C++:
+// https://en.cppreference.com/cpp/io/ios_base/openmode
+// https://en.cppreference.com/cpp/io/basic_ostream/write
+// https://en.cppreference.com/cpp/io/basic_istream/read
+//
+// Consulta reconstruida (no corresponde al prompt literal):
+// "En clase trabajamos arboles binarios, monticulos y
+// codificacion de Huffman. Ya tengo las plantillas que
+// implementamos y entiendo como se construye el arbol
+// a partir de las frecuencias de los caracteres.
+//
+// Para comprobar mi adaptacion quiero contrastar
+// ios::binary, write() y read() con la documentacion
+// de cppreference y el formato exigido para RISK.
+//
+// Quiero conservar las estructuras vistas en clase y
+// entender como almacenar el encabezado solicitado,
+// agrupar los codigos en bytes y recuperar la informacion.
+// Ayudame a plantear y revisar esa adaptacion en C++,
+// explicando las decisiones que no hemos trabajado
+// directamente en los talleres."
+//
+// Alcance de la asistencia:
+// ChatGPT propuso un borrador de las funciones de Huffman,
+// utilizado como base para su revision, adaptacion,
+// integracion y pruebas dentro del proyecto.
+
 
 // construye el arbol de Huffman a partir de las frecuencias
 // cada vez se unen los dos subarboles con menor frecuencia hasta que solo quede uno

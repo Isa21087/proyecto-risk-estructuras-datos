@@ -31,6 +31,38 @@ EstadoComando Partida::inicializar(string nombreArchivo)
         return ARCHIVO_ERRONEO;
     }
 
+    // USO DE IA - LECTURA DE PARTIDAS COMPRIMIDAS
+    //
+    // Se partio de la funcion inicializar de la Entrega 1,
+    // que ya permitia cargar jugadores y territorios desde
+    // un archivo de texto.
+    //
+    // Para la Entrega 2 se adapto la lectura para aceptar
+    // tambien archivos comprimidos con Huffman, conservando
+    // las validaciones y el procesamiento original.
+    //
+    // Referencia tecnica para revisar esta adaptacion:
+    // https://en.cppreference.com/w/cpp/io/basic_istringstream
+    //
+    // Consulta descrita posteriormente (no es el prompt literal):
+    //
+    // "Ya tengo implementada la inicializacion de partidas
+    // en texto desde la primera entrega y estoy integrando
+    // el almacenamiento comprimido de Huffman.
+    //
+    // Estoy revisando como utilizar istringstream para
+    // procesar el texto recuperado desde un archivo binario,
+    // sin duplicar toda la lectura de jugadores y territorios.
+    //
+    // Quiero comprobar si puedo manejar ambas fuentes con
+    // istream y conservar las validaciones existentes.
+    // Ayudame a revisar la adaptacion, especialmente el
+    // manejo de errores y el flujo de lectura."
+    //
+    // ChatGPT apoyo la propuesta y revision de esta
+    // adaptacion. La inicializacion original y sus
+    // validaciones se conservaron como base del proyecto.
+
     // si el archivo es comprimido, recuperamos su texto con Huffman
     string contenidoDescomprimido;
     istringstream textoDescomprimido;
@@ -951,6 +983,41 @@ EstadoComando Partida::fortificar(string nombreJugador)
 
     return COMANDO_CORRECTO;
 }
+
+// USO DE IA - ALMACENAMIENTO DE PARTIDAS
+//
+// Base del trabajo:
+// Se conservo la clase Partida de la Entrega 1 y se
+// utilizaron las operaciones existentes de Tablero.
+// El formato de almacenamiento corresponde al componente
+// 2 del enunciado oficial de RISK.
+//
+// Referencias tecnicas para revisar la implementacion:
+// https://en.cppreference.com/w/cpp/io/basic_ostringstream
+// https://en.cppreference.com/w/cpp/io/basic_ostream/write
+//
+// Consulta redactada posteriormente (no es el prompt literal):
+//
+// "Estoy trabajando sobre la clase Partida que ya tenemos
+// implementada desde la primera entrega. Para el segundo
+// componente estoy integrando el guardado de partidas
+// en texto y en un archivo comprimido con Huffman.
+//
+// Quiero revisar como organizar los datos de jugadores
+// y territorios en una sola representacion de texto,
+// siguiendo el formato que indica el profesor.
+//
+// Tambien quiero comprobar como reutilizar ese contenido
+// en guardar y guardarComprimido, para evitar repetir
+// codigo o modificar las funciones originales del juego.
+//
+// Ayudame a revisar la integracion, el manejo de archivos
+// y las validaciones de error, manteniendo las estructuras
+// y el estilo del proyecto."
+//
+// ChatGPT apoyo la organizacion y propuso codigo para las
+// operaciones nuevas de almacenamiento. Las propuestas
+// incorporadas fueron revisadas, integradas y probadas.
 
 // construye el contenido que vamos a escribir en el archivo
 // primero van los jugadores y despues los 42 territorios del tablero

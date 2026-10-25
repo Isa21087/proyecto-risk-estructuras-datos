@@ -26,6 +26,33 @@ T ArbolBinario<T>::datoRaiz() {
     return this->raiz->obtenerDato();
 }
 
+// USO DE IA - ADAPTACION DEL ARBOL BINARIO
+//
+// Se conservo como base la implementacion de ArbolBinario
+// trabajada en clase. Para integrarla con Huffman fue
+// necesario agregar acceso y asignacion de la raiz.
+//
+// Consulta realizada con apoyo de ChatGPT
+// (descripcion posterior, no prompt literal):
+//
+// "Estoy adaptando mi implementacion de ArbolBinario
+// del material de clase para construir el arbol de Huffman.
+//
+// En el algoritmo voy uniendo nodos y subarboles hasta
+// obtener una unica raiz. Necesito revisar como integrar
+// esa raiz al arbol que ya tengo implementado, sin cambiar
+// las operaciones originales ni perder el control de los
+// punteros.
+//
+// Quiero comprobar si puedo agregar operaciones para
+// consultar la raiz y asignarla solamente cuando el
+// arbol este vacio, conservando la estructura del curso."
+//
+// ChatGPT apoyo la propuesta y revision de estas dos
+// operaciones. El resto del arbol se conserva de la
+// implementacion utilizada en clase.
+
+
 template< class T >
 NodoBinario<T>* ArbolBinario<T>::obtenerRaiz() {
     return this->raiz;
