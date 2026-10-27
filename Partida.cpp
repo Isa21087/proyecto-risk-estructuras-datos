@@ -267,8 +267,11 @@ EstadoComando Partida::inicializar(string nombreArchivo)
 
         territoriosLeidos.push_back(codigo);
 
-        // Cada territorio debe tener al menos una unidad.
-        if (unidades <= 0)
+        // Aceptamos cero unidades porque una conquista puede dejar
+        // un territorio asi y ese estado tambien debe poder recuperarse
+        // desde una partida guardada
+        // Las cantidades negativas siguen siendo invalidas
+        if (unidades < 0)
         {
             archivo.close();
             return ARCHIVO_SIN_FORMATO;

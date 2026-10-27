@@ -3,7 +3,8 @@
 set -euo pipefail
 
 # Este script prepara solamente la Entrega 2
-# El ZIP oficial no incluye archivos de pruebas ni carpetas internas
+# El ZIP oficial incluye el PDF, el codigo y los archivos de prueba
+# Todos quedan en la raiz del ZIP, sin carpetas internas
 
 PROYECTO="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$PROYECTO"
