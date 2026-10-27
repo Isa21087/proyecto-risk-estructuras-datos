@@ -38,8 +38,12 @@ g++ -std=c++17 -Wall -Wextra -pedantic \
     ./*.cpp -o "$TEMP/risk"
 
 # Creamos el ZIP oficial sin rutas ni carpetas internas
+# Incluimos el archivo de partida y las pruebas de la segunda entrega
+PRUEBAS=( pruebas/entrega2/archivos_generados/*.txt
+          pruebas/entrega2/archivos_generados/*.bin )
+
 zip -q -j "$TEMP/Entrega_2_Risk.zip" \
-    "$PDF" "${FUENTES[@]}"
+    "$PDF" "${FUENTES[@]}" partida.txt "${PRUEBAS[@]}"
 
 mv "$TEMP/Entrega_2_Risk.zip" "$ZIP_FINAL"
 
