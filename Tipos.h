@@ -2,12 +2,14 @@
 #ifndef TIPOS_H
 #define TIPOS_H
 using namespace std;
-enum EtapaTurno {
+enum EtapaTurno
+{
     ETAPA_OBTENER_UNIDADES,
     ETAPA_ATACAR,
     ETAPA_FORTIFICAR
 };
-enum EstadoComando {
+enum EstadoComando
+{
     COMANDO_CORRECTO,
     ARCHIVO_VACIO,
     ARCHIVO_ERRONEO,
@@ -21,24 +23,29 @@ enum EstadoComando {
     JUGADOR_NO_HA_ATACADO,
     JUGADOR_YA_OBTUVO_UNIDADES,
     ENTRADA_CERRADA,
-    JUGADOR_YA_TERMINO_ATAQUE
+    JUGADOR_YA_TERMINO_ATAQUE,
+    TERRITORIO_NO_VALIDO,
+    DESTINO_YA_CONTROLADO,
+    SIN_RECORRIDO
 };
 
-enum TipoCarta {
+enum TipoCarta
+{
 
     CARTA_INFANTERIA,
     CARTA_CABALLERIA,
     CARTA_ARTILLERIA,
     CARTA_COMODIN
-
 };
 
-struct ResultadoAtaque {
+struct ResultadoAtaque
+{
     bool ataqueRealizado;
     bool conquistoTerritorio;
 };
 
-struct DatoHuffman {
+struct DatoHuffman
+{
     unsigned char simbolo;
     unsigned long long frecuencia;
 };
