@@ -1,6 +1,5 @@
 # Contribuir al Proyecto RISK
 
-
 Este archivo define cómo organizar el trabajo del equipo durante el desarrollo completo del proyecto, incluyendo código, documentación, pruebas, ramas, commits y entregas.
 
 El objetivo es mantener una implementación coherente, organizada y fácil de entender y sustentar por todos los integrantes.
@@ -65,7 +64,7 @@ guardar_comprimido
 inicializar
 ```
 
-El comando `inicializar` debe poder trabajar tanto con partidas almacenadas normalmente como con archivos comprimidos cuando esta funcionalidad haya sido implementada.
+El comando `inicializar` admite partidas en texto y archivos `.bin` comprimidos mediante Huffman. La recuperación reutiliza las validaciones de jugadores y territorios.
 
 ### Componente 3: estrategias de juego
 
@@ -120,7 +119,7 @@ Tablero
 
 No se debe mantener otra secuencia independiente de territorios dentro de `Tablero`, porque esto podría generar dos fuentes de información diferentes sobre el mismo territorio.
 
-Cuando se implemente el Componente 3, las relaciones entre territorios también serán utilizadas para representar y consultar el grafo del tablero.
+En el Componente 3, las relaciones entre territorios también se utilizan para representar y consultar el grafo del tablero.
 
 ### `Jugador`
 
@@ -200,7 +199,7 @@ Su funcionamiento debe mantenerse coherente con las reglas de obtención e inter
 
 ### Estructuras de Huffman
 
-Para el Componente 2 se deberán utilizar las estructuras necesarias para:
+La implementación del Componente 2 utiliza estructuras jerárquicas para:
 
 - calcular frecuencias;
 - construir el árbol de Huffman;
@@ -213,7 +212,7 @@ Los TAD concretos utilizados deben corresponder al diseño implementado por el g
 
 ### Grafo
 
-Para el Componente 3 se utilizará una representación de grafo que permita analizar los territorios y sus conexiones.
+El Componente 3 utiliza el TAD `Grafo`, que guarda los códigos de territorio en una secuencia y sus conexiones en una matriz de adyacencia con costos. Las consultas `costo_conquista` y `conquista_mas_barata` utilizan BFS y Dijkstra, respectivamente.
 
 Debe permitir implementar las operaciones necesarias para:
 
@@ -222,7 +221,7 @@ costo_conquista
 conquista_mas_barata
 ```
 
-La estructura definitiva debe corresponder al diseño realizado por el equipo y a los conceptos vistos en clase.
+La representación y los costos deben mantenerse coherentes con los TAD implementados, el tablero y los conceptos de clase.
 
 ---
 
@@ -393,7 +392,7 @@ Las reglas implementadas deben provenir de:
 Entre las reglas actualmente utilizadas se encuentran:
 
 - después de una fortificación debe quedar mínimo una unidad en el territorio de origen;
-- después de conquistar un territorio se deben trasladar unidades al territorio conquistado;
+- el código histórico permite trasladar cero unidades después de una conquista; este comportamiento se documentó en la Entrega 1 y no equivale a las restricciones de fortificación;
 - el territorio atacante no puede quedar vacío;
 - un jugador puede ganar al controlar los 42 territorios según la modalidad implementada;
 - en un empate de dados gana el defensor;
@@ -414,7 +413,7 @@ La rama principal del proyecto es:
 main
 ```
 
-`main` representa la versión estable del proyecto y se encuentra protegida.
+`main` representa la versión estable del proyecto. Las reglas de protección deben comprobarse en la configuracion real de GitHub; no basta con que esta guia las describa.
 
 No se debe trabajar directamente sobre `main`.
 
@@ -434,12 +433,11 @@ Formato:
 tipo/nombre-tarea
 ```
 
-Los nombres utilizados por el equipo son:
+Los nombres utilizados actualmente por el equipo son:
 
 ```text
 isabella
 saul
-alejandro
 ```
 
 ### Nuevas funcionalidades
@@ -455,7 +453,7 @@ Ejemplos:
 ```text
 feature/isabella-huffman
 feature/saul-guardar-comprimido
-feature/alejandro-inicializar-binario
+feature/isabella-inicializar-binario
 ```
 
 ### Correcciones
@@ -471,7 +469,7 @@ Ejemplos:
 ```text
 fix/isabella-ataque
 fix/saul-tablero
-fix/alejandro-turno
+fix/isabella-turno
 ```
 
 ### Documentación
@@ -487,7 +485,7 @@ Ejemplos:
 ```text
 docs/isabella-diseno-entrega2
 docs/saul-plan-pruebas
-docs/alejandro-diagrama-tads
+docs/isabella-diagrama-tads
 ```
 
 ### Organización y mantenimiento
@@ -507,7 +505,7 @@ chore/saul-organizar-pruebas
 
 ### Reglas para las ramas
 
-- Usar siempre `isabella`, `saul` o `alejandro` como responsable.
+- Utilizar `isabella` o `saul` como responsable de las nuevas ramas, según quien realice el trabajo.
 - Escribir todo en minúsculas.
 - No utilizar espacios.
 - No utilizar tildes.
@@ -602,7 +600,7 @@ feat(huffman): construir arbol de codificacion
 ```
 
 ```text
-feat(grafo): implementar representacion del tablero
+feat(grafo): implementar representación del tablero
 ```
 
 ```text
@@ -849,15 +847,16 @@ Partida
 ├── Turno
 ├── Ataque
 │   └── Dados
-└── Mazo
-    └── Carta
+├── Mazo
+│   └── Carta
+└── Grafo
 ```
 
 `Ataque` también consulta y modifica información relacionada con `Tablero` y `Territorio`.
 
-El Componente 2 agregará las estructuras necesarias para Huffman.
+El Componente 2 incorpora las estructuras de Árbol Binario, Nodo Binario y MonticuloHuffman utilizadas por las funciones de Huffman.
 
-El Componente 3 utilizará las relaciones entre territorios para trabajar con el grafo del tablero.
+El Componente 3 incorpora el TAD Grafo como atributo de Partida y utiliza las conexiones del tablero para BFS y Dijkstra.
 
 Cuando cambie la implementación, esta sección también debe actualizarse.
 
@@ -865,133 +864,36 @@ Cuando cambie la implementación, esta sección también debe actualizarse.
 
 ## 18. Organización de las entregas
 
-Las entregas anteriores deben conservarse como evidencia de lo que realmente fue entregado.
-
-No se deben modificar posteriormente los ZIP correspondientes a entregas ya realizadas.
-
-Los archivos finales se almacenan en:
+Las entregas anteriores se conservan como evidencia histórica. No se deben editar ni reemplazar sus ZIP después de presentarlas. Las carpetas principales son:
 
 ```text
-entregas/
+entregas/           ZIP finales e históricos
+documentacion/      informes PDF, organizados por entrega
+pruebas/            casos de prueba y archivos auxiliares
+scripts/            generadores y herramientas del proyecto
 ```
 
-Ejemplo:
+### Scripts existentes
 
-```text
-entregas/
-├── Entrega_1_Risk.zip
-├── Entrega_2_Risk.zip
-└── Entrega_3_Risk.zip
-```
+- `scripts/generar_entrega.sh`: script histórico. No asumir que sus parámetros ni su selección de archivos corresponden a la Entrega 3.
+- `scripts/generar_entrega2.sh`: generador de la Entrega 2. Se conserva por trazabilidad.
+- `scripts/generar_entrega3.sh`: generador utilizado y verificado para la Entrega 3. El archivo existe localmente y está pendiente de incorporarse a `main` mediante Pull Request.
 
-La documentación correspondiente a cada entrega debe mantenerse organizada en:
-
-```text
-documentacion/
-├── entrega2/
-└── entrega3/
-```
-
-Las pruebas deben almacenarse en:
-
-```text
-pruebas/
-├── entrega1/
-├── entrega2/
-└── entrega3/
-```
-
-Los scripts auxiliares se almacenan en:
-
-```text
-scripts/
-```
-
-Actualmente se utiliza:
-
-```text
-scripts/generar_entrega.sh
-```
-
-Este script permite generar de forma automática el archivo ZIP correspondiente a una entrega.
-
-### Uso del script de entrega
-
-Antes de utilizar el script por primera vez, se debe comprobar que tenga permiso de ejecución:
+Para generar la Entrega 3, el PDF final debe estar en `documentacion/entrega3/Documento_Entrega_3_Risk.pdf`. Se utiliza la versión actualizada de `main`, sincronizada con `origin/main`, y se ejecuta desde la raíz del repositorio:
 
 ```bash
-chmod +x scripts/generar_entrega.sh
+git switch main
+git pull --ff-only origin main
+bash scripts/generar_entrega3.sh
 ```
 
-Este permiso normalmente queda registrado en Git después de realizar el commit correspondiente, pero puede volver a aplicarse si fuera necesario.
+El script compila con C++17, ejecuta las pruebas automatizadas del Componente 3, construye el ZIP y comprueba que las fuentes extraídas compilen de forma independiente. **No sobrescribe un ZIP existente**: para una nueva generación, antes debe revisarse y respaldarse el archivo anterior. No se debe utilizar este generador desde una rama de desarrollo.
 
-Para generar la Entrega 2:
+Para la Entrega 3, el ZIP oficial contiene un solo PDF (`Documento_Entrega_3_Risk.pdf`) y los archivos fuente necesarios de tipos `.cpp`, `.cxx`, `.h` y `.hxx`, directamente en la raíz del ZIP, sin carpetas internas. No incluye `.txt`, capturas, pruebas, scripts, ejecutables ni carpetas de Git. El archivo final queda en `entregas/Entrega_3_Risk.zip`.
 
-```bash
-./scripts/generar_entrega.sh 2
-```
+Antes de entregar se debe comprobar la integridad del ZIP, su lista de archivos y el funcionamiento del programa compilado desde una copia extraída. La entrega académica solo queda cerrada al confirmar el envío oficial y conservar la constancia.
 
-Para generar la Entrega 3:
-
-```bash
-./scripts/generar_entrega.sh 3
-```
-
-El script genera automáticamente el archivo correspondiente dentro de:
-
-```text
-entregas/
-```
-
-Por ejemplo:
-
-```text
-entregas/Entrega_2_Risk.zip
-```
-
-o:
-
-```text
-entregas/Entrega_3_Risk.zip
-```
-
-El ZIP debe contener únicamente los archivos necesarios para la entrega según las instrucciones vigentes del profesor.
-
-Actualmente el script incluye los archivos:
-
-```text
-*.cpp
-*.h
-*.txt
-```
-
-ubicados en la raíz del proyecto.
-
-No se deben incluir archivos compilados o temporales como:
-
-```text
-*.o
-*.exe
-a.out
-```
-
-Tampoco se deben incluir dentro del ZIP carpetas internas como:
-
-```text
-.git/
-.github/
-documentacion/
-pruebas/
-scripts/
-```
-
-La documentación final debe entregarse de la forma indicada por el profesor para la entrega correspondiente.
-
-Si existe una diferencia entre el enunciado escrito y una instrucción posterior dada directamente por el profesor, se debe seguir la instrucción más reciente confirmada.
-
-Antes de entregar se debe revisar manualmente el contenido del ZIP generado para comprobar que no falte ningún archivo necesario y que no se haya incluido información adicional por error.
-
-No se debe modificar manualmente un ZIP correspondiente a una entrega anterior.
+---
 
 ## 19. Uso de inteligencia artificial
 
@@ -1058,3 +960,27 @@ Cuando exista una contradicción, utilizar este orden:
 6. Sugerencias externas o herramientas de inteligencia artificial.
 
 Si todavía falta información, la decisión debe permanecer como **pendiente** hasta ser confirmada.
+
+---
+
+## 22. Ubuntu como fuente principal y Windows como espejo
+
+El repositorio real de RISK se trabaja en Ubuntu: `~/Universidad/Proyecto Estructuras`. GitHub conserva el historial, las ramas y los Pull Requests. La copia accesible en `~/Windows-Desktop/Proyecto Estructuras` es **solo un espejo para consulta y archivos**, y no contiene `.git`.
+
+El flujo correcto es **GitHub ↔ Ubuntu → Windows**. Las modificaciones de código, compilación, pruebas y commits se hacen en Ubuntu y mediante ramas de trabajo. Después de integrar un PR, se actualiza `main` con `git pull --ff-only origin main` antes de sincronizar el espejo.
+
+La sincronización se realiza con el script conservado fuera del repositorio:
+
+```bash
+bash ~/Universidad/herramientas/sincronizar_windows_risk.sh
+```
+
+El comando anterior **solo simula** los cambios. Después de revisar cuidadosamente los posibles `*deleting`, la aplicación real requiere ejecutar la variante `--apply` y confirmar escribiendo `SINCRONIZAR`. El script excluye `.git` y binarios temporales y respalda fuera del repositorio los archivos que reemplaza o elimina. Nunca ejecutar `rsync --delete` sobre una ruta de Windows no verificada.
+
+Los archivos PDF y ZIP finales pueden copiarse al espejo aunque todavía no estén confirmados en Git; esto no equivale a un commit ni a un envío al profesor. Un `git status` con archivos sin seguimiento debe revisarse antes de preparar un PR.
+
+## 23. Propietarios de código y reglas de GitHub
+
+El archivo `.github/CODEOWNERS` identifica responsables de revisión de los entregables históricos. **CODEOWNERS no impide por sí solo modificar archivos:** la obligatoriedad de aprobaciones depende de las reglas efectivamente activas de GitHub. Antes de activar `Require review from Code Owners` o exigir aprobaciones, se deben comprobar los permisos reales de ambos integrantes y evitar que un autor quede bloqueado por no poder aprobar su propio Pull Request.
+
+La política acordada para trabajar es utilizar ramas, revisar los cambios y fusionarlos mediante PR. La existencia y el efecto de una protección técnica de `main` deben verificarse directamente en la configuración del repositorio.
