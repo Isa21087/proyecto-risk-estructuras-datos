@@ -8,17 +8,21 @@
 #include "Turno.h"
 #include "Ataque.h"
 #include "Mazo.h"
+#include "Grafo.h"
 using namespace std;
 
-class Partida {
+class Partida
+{
 
 private:
-
     // Guarda los jugadores que participan en la partida.
     vector<Jugador> jugadores;
 
     // Guarda la informacion de los continentes y territorios del juego.
     Tablero tablero;
+
+    // guarda las conexiones entre los territorios para consultar las estrategias
+    Grafo grafo;
 
     // Controla el jugador actual y la etapa del turno.
     Turno turno;
@@ -43,12 +47,19 @@ private:
     string obtenerTextoPartida() const;
 
 public:
-
     // Crea una partida con su estado inicial.
     Partida();
 
     // Inicializa la partida utilizando la informacion de un archivo.
     EstadoComando inicializar(string nombreArchivo);
+
+    // busca desde que territorio propio se puede llegar mas cerca al destino
+    // y calcula las unidades enemigas que hay en ese recorrido
+    EstadoComando costoConquista(string nombreJugador, string codigoTerritorio);
+
+    // busca el territorio enemigo que puede conquistarse con el menor costo
+    // considera todos los territorios propios como posibles puntos de partida
+    EstadoComando conquistaMasBarata(string nombreJugador);
 
     // guarda la informacion actual del juego en un archivo de texto
     EstadoComando guardar(string nombreArchivo) const;

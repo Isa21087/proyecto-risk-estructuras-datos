@@ -1,14 +1,17 @@
+
 #include "Partida.h"
 #include "Huffman.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
-using namespace std;
-// Inicializa la partida sin datos cargados.
+#include <queue>
+#include <climits>
 
+using namespace std;
+
+// Inicializa la partida sin datos cargados.
 Partida::Partida()
 {
-
     inicializada = false;
     terminada = false;
     ganador = "";
@@ -17,7 +20,6 @@ Partida::Partida()
 // Inicializa la partida desde un archivo.
 EstadoComando Partida::inicializar(string nombreArchivo)
 {
-
     // No permite cargar otra partida si ya hay una inicializada.
     if (inicializada)
     {
@@ -76,6 +78,7 @@ EstadoComando Partida::inicializar(string nombreArchivo)
             archivo.close();
             return ARCHIVO_SIN_FORMATO;
         }
+
         textoDescomprimido.str(contenidoDescomprimido);
         fuente = &textoDescomprimido;
     }
@@ -128,7 +131,6 @@ EstadoComando Partida::inicializar(string nombreArchivo)
     // Lee el nombre y el color de cada jugador.
     for (int i = 0; i < cantidadJugadores; i++)
     {
-
         if (!getline(*fuente, linea))
         {
             archivo.close();
@@ -176,7 +178,6 @@ EstadoComando Partida::inicializar(string nombreArchivo)
             color != "negro" &&
             color != "gris")
         {
-
             archivo.close();
             return ARCHIVO_SIN_FORMATO;
         }
@@ -184,11 +185,9 @@ EstadoComando Partida::inicializar(string nombreArchivo)
         // No permite nombres ni colores repetidos.
         for (int j = 0; j < jugadoresLeidos.size(); j++)
         {
-
             if (jugadoresLeidos[j].obtenerNombre() == nombre ||
                 jugadoresLeidos[j].obtenerColor() == color)
             {
-
                 archivo.close();
                 return ARCHIVO_SIN_FORMATO;
             }
@@ -206,7 +205,6 @@ EstadoComando Partida::inicializar(string nombreArchivo)
     // Lee los 42 territorios.
     for (int i = 0; i < 42; i++)
     {
-
         if (!getline(*fuente, linea))
         {
             archivo.close();
@@ -252,7 +250,6 @@ EstadoComando Partida::inicializar(string nombreArchivo)
 
         for (int j = 0; j < territoriosLeidos.size(); j++)
         {
-
             if (territoriosLeidos[j] == codigo)
             {
                 repetido = true;
@@ -267,8 +264,11 @@ EstadoComando Partida::inicializar(string nombreArchivo)
 
         territoriosLeidos.push_back(codigo);
 
-        // Cada territorio debe tener al menos una unidad.
-        if (unidades <= 0)
+        // Aceptamos cero unidades porque una conquista puede dejar
+        // un territorio asi y ese estado tambien debe poder recuperarse
+        // desde una partida guardada
+        // Las cantidades negativas siguen siendo invalidas
+        if (unidades < 0)
         {
             archivo.close();
             return ARCHIVO_SIN_FORMATO;
@@ -279,7 +279,6 @@ EstadoComando Partida::inicializar(string nombreArchivo)
 
         for (int j = 0; j < jugadoresLeidos.size(); j++)
         {
-
             if (jugadoresLeidos[j].obtenerColor() == color)
             {
                 posicionJugador = j;
@@ -303,7 +302,6 @@ EstadoComando Partida::inicializar(string nombreArchivo)
     // No permite mas datos despues de los 42 territorios.
     while (getline(*fuente, linea))
     {
-
         istringstream lineaRestante(linea);
 
         if (lineaRestante >> datoExtra)
@@ -313,16 +311,57 @@ EstadoComando Partida::inicializar(string nombreArchivo)
         }
     }
 
-    // Revisa que todo el tablero este configurado.
+    // revisamos que todos los territorios hayan quedado configurados
     if (!tableroLeido.todosLosTerritoriosConfigurados())
     {
         archivo.close();
         return ARCHIVO_SIN_FORMATO;
     }
 
+    // preparamos el grafo usando los territorios que ya fueron validados
+    // todavia no cambiamos la partida real por si algo falla
+    Grafo grafoLeido;
+
+    // registramos los mismos 42 codigos que se leyeron del archivo
+    for (int i = 0; i < territoriosLeidos.size(); i++)
+    {
+        if (!grafoLeido.agregarTerritorio(territoriosLeidos[i]))
+        {
+            archivo.close();
+            return ARCHIVO_SIN_FORMATO;
+        }
+    }
+
+    // revisamos las conexiones del mapa que ya tiene Tablero
+    // no necesitamos volver a escribir los vecinos de cada territorio
+    for (int i = 0; i < grafoLeido.cantidadTerritorios(); i++)
+    {
+        string codigoOrigen = grafoLeido.obtenerTerritorio(i);
+
+        for (int j = 0; j < grafoLeido.cantidadTerritorios(); j++)
+        {
+            // no registramos un territorio como vecino de si mismo
+            if (i == j)
+            {
+                continue;
+            }
+
+            string codigoDestino = grafoLeido.obtenerTerritorio(j);
+
+            // si Tablero dice que son vecinos, guardamos la conexion
+            // por ahora usamos costo cero porque todavia no sabemos
+            // para que jugador se va a calcular una estrategia
+            if (tableroLeido.sonVecinos(codigoOrigen, codigoDestino))
+            {
+                grafoLeido.establecerCosto(i, j, 0);
+            }
+        }
+    }
+
     // Guarda los datos cuando todo el archivo es valido.
     jugadores = jugadoresLeidos;
     tablero = tableroLeido;
+    grafo = grafoLeido;
 
     // El primer jugador del archivo empieza el turno.
     turno.iniciar(0);
@@ -338,10 +377,10 @@ EstadoComando Partida::inicializar(string nombreArchivo)
 
     return COMANDO_CORRECTO;
 }
+
 // Revisa si se puede consultar la partida.
 EstadoComando Partida::validarEstadoJuego() const
 {
-
     if (!inicializada)
     {
         return JUEGO_NO_INICIALIZADO;
@@ -358,7 +397,6 @@ EstadoComando Partida::validarEstadoJuego() const
 // Muestra los jugadores, el turno actual y el tablero.
 void Partida::mostrarEstadoJuego() const
 {
-
     if (validarEstadoJuego() != COMANDO_CORRECTO)
     {
         return;
@@ -369,7 +407,6 @@ void Partida::mostrarEstadoJuego() const
 
     for (int i = 0; i < jugadores.size(); i++)
     {
-
         cout << "Jugador: " << jugadores[i].obtenerNombre()
              << " | Color: " << jugadores[i].obtenerColor() << endl;
     }
@@ -381,13 +418,12 @@ void Partida::mostrarEstadoJuego() const
 
     tablero.mostrarTablero();
 }
+
 // Busca al jugador por su nombre.
 int Partida::buscarPosicionJugador(string nombreJugador) const
 {
-
     for (int i = 0; i < jugadores.size(); i++)
     {
-
         if (jugadores[i].obtenerNombre() == nombreJugador)
         {
             return i;
@@ -446,7 +482,6 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
     while (!terminarCanjes &&
            jugadorTemporal.obtenerCartas().size() >= 3)
     {
-
         // La referencia permite consultar el vector
         // sin crear una copia de todas las cartas.
         const vector<Carta> &cartasJugador =
@@ -456,27 +491,22 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 
         for (int i = 0; i < cartasJugador.size(); i++)
         {
-
             cout << i + 1 << ". ";
 
             if (cartasJugador[i].obtenerTipo() == CARTA_INFANTERIA)
             {
-
                 cout << "Infanteria";
             }
             else if (cartasJugador[i].obtenerTipo() == CARTA_CABALLERIA)
             {
-
                 cout << "Caballeria";
             }
             else if (cartasJugador[i].obtenerTipo() == CARTA_ARTILLERIA)
             {
-
                 cout << "Artilleria";
             }
             else
             {
-
                 cout << "Comodin";
             }
 
@@ -485,7 +515,6 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 
             if (codigoTerritorio != "")
             {
-
                 cout << " - Territorio "
                      << codigoTerritorio;
             }
@@ -509,29 +538,24 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 
         if (!(entrada >> respuesta))
         {
-
             cout << "Debe escribir s o n." << endl;
         }
         else if (entrada >> datoExtra)
         {
-
             cout << "Escriba solamente s o n." << endl;
         }
         else if (respuesta == "n" ||
                  respuesta == "N")
         {
-
             terminarCanjes = true;
         }
         else if (respuesta == "s" ||
                  respuesta == "S")
         {
-
             bool seleccionTerminada = false;
 
             while (!seleccionTerminada)
             {
-
                 cout << "Escriba las posiciones de las tres cartas "
                      << "o n para cancelar: ";
 
@@ -545,12 +569,10 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
                 if (seleccion == "n" ||
                     seleccion == "N")
                 {
-
                     seleccionTerminada = true;
                 }
                 else
                 {
-
                     istringstream entradaSeleccion(
                         seleccion);
 
@@ -561,19 +583,16 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 
                     if (!(entradaSeleccion >> posicionUno >> posicionDos >> posicionTres))
                     {
-
                         cout << "Debe escribir tres posiciones enteras."
                              << endl;
                     }
                     else if (entradaSeleccion >> datoSobrante)
                     {
-
                         cout << "Escriba solamente las tres posiciones."
                              << endl;
                     }
                     else
                     {
-
                         int bonificacionCanje =
                             mazoTemporal.procesarIntercambio(
                                 jugadorTemporal,
@@ -584,14 +603,12 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 
                         if (bonificacionCanje == 0)
                         {
-
                             cout << "Las cartas seleccionadas no forman "
                                  << "una combinacion valida."
                                  << endl;
                         }
                         else
                         {
-
                             bonificacionCartas +=
                                 bonificacionCanje;
 
@@ -614,7 +631,6 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
         }
         else
         {
-
             cout << "Debe escribir s o n." << endl;
         }
     }
@@ -630,7 +646,6 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 
     while (unidadesPendientes > 0)
     {
-
         cout << "Escriba el codigo del territorio "
              << "y la cantidad de unidades: ";
 
@@ -649,32 +664,27 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 
         if (!(entrada >> codigoTerritorio >> cantidad))
         {
-
             cout << "Debe escribir un codigo y una cantidad entera."
                  << endl;
         }
         else if (entrada >> datoExtra)
         {
-
             cout << "Solo debe escribir el codigo y la cantidad."
                  << endl;
         }
         else if (cantidad <= 0)
         {
-
             cout << "La cantidad debe ser mayor que cero."
                  << endl;
         }
         else if (cantidad > unidadesPendientes)
         {
-
             cout << "No tiene suficientes unidades disponibles."
                  << endl;
         }
         else if (!tableroTemporal.existeTerritorio(
                      codigoTerritorio))
         {
-
             cout << "El territorio no existe." << endl;
         }
         else if (!turno.ejecutarObtencionUnidades(
@@ -683,13 +693,11 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
                      codigoTerritorio,
                      cantidad))
         {
-
             cout << "Elija un territorio que pertenezca al jugador."
                  << endl;
         }
         else
         {
-
             unidadesPendientes -= cantidad;
 
             cout << "Unidades restantes: "
@@ -716,7 +724,6 @@ EstadoComando Partida::obtenerUnidades(string nombreJugador)
 // Revisa si un jugador conquisto todo el tablero.
 bool Partida::comprobarGanador()
 {
-
     if (!inicializada)
     {
         return false;
@@ -724,10 +731,8 @@ bool Partida::comprobarGanador()
 
     for (int i = 0; i < jugadores.size(); i++)
     {
-
         if (tablero.contarTerritorios(jugadores[i].obtenerColor()) == 42)
         {
-
             terminada = true;
             ganador = jugadores[i].obtenerNombre();
 
@@ -741,7 +746,6 @@ bool Partida::comprobarGanador()
 // Controla la etapa de ataque del jugador.
 EstadoComando Partida::atacar(string nombreJugador)
 {
-
     EstadoComando estado = validarEstadoJuego();
 
     if (estado != COMANDO_CORRECTO)
@@ -776,7 +780,6 @@ EstadoComando Partida::atacar(string nombreJugador)
 
     while (continuar)
     {
-
         cout << "Desea realizar un ataque? (s/n): ";
 
         string respuesta;
@@ -792,7 +795,6 @@ EstadoComando Partida::atacar(string nombreJugador)
         }
         else if (respuesta == "s" || respuesta == "S")
         {
-
             ResultadoAtaque resultado = ataque.ejecutar(jugadores[posicion], tablero);
 
             // Comprueba la victoria despues de una conquista.
@@ -801,10 +803,8 @@ EstadoComando Partida::atacar(string nombreJugador)
                 // Entrega una sola carta aunque conquiste varios territorios.
                 if (!cartaEntregada)
                 {
-
                     if (mazo.entregarCarta(jugadores[posicion]))
                     {
-
                         cartaEntregada = true;
 
                         cout << "Recibio una carta por conquistar un territorio." << endl;
@@ -816,6 +816,7 @@ EstadoComando Partida::atacar(string nombreJugador)
                         cout << "No quedan cartas disponibles en el mazo." << endl;
                     }
                 }
+
                 if (comprobarGanador())
                 {
                     cout << "El ganador es " << ganador << "." << endl;
@@ -874,7 +875,6 @@ EstadoComando Partida::fortificar(string nombreJugador)
 
     while (!fortificacionTerminada)
     {
-
         cout << "Escriba origen, destino y cantidad, o n para no trasladar: ";
 
         string linea;
@@ -893,53 +893,44 @@ EstadoComando Partida::fortificar(string nombreJugador)
 
         if (!(entrada >> codigoOrigen))
         {
-
             cout << "Debe escribir los datos o n para terminar."
                  << endl;
         }
         else if (codigoOrigen == "n" || codigoOrigen == "N")
         {
-
             if (entrada >> datoExtra)
             {
-
                 cout << "Escriba solamente n para terminar."
                      << endl;
             }
             else
             {
-
                 fortificacionTerminada = true;
             }
         }
         else if (!(entrada >> codigoDestino >> cantidad))
         {
-
             cout << "Debe escribir origen, destino y una cantidad entera."
                  << endl;
         }
         else if (entrada >> datoExtra)
         {
-
             cout << "Solo debe escribir origen, destino y cantidad."
                  << endl;
         }
         else if (codigoOrigen == codigoDestino)
         {
-
             cout << "Debe escoger dos territorios diferentes."
                  << endl;
         }
         else if (cantidad <= 0)
         {
-
             cout << "La cantidad debe ser mayor que cero."
                  << endl;
         }
         else if (!tableroTemporal.existeTerritorio(codigoOrigen) ||
                  !tableroTemporal.existeTerritorio(codigoDestino))
         {
-
             cout << "Uno de los territorios no existe."
                  << endl;
         }
@@ -947,7 +938,6 @@ EstadoComando Partida::fortificar(string nombreJugador)
                      codigoOrigen,
                      codigoDestino))
         {
-
             cout << "Los territorios deben ser vecinos."
                  << endl;
         }
@@ -958,7 +948,6 @@ EstadoComando Partida::fortificar(string nombreJugador)
                      codigoDestino,
                      cantidad))
         {
-
             cout << "No se pudo realizar la fortificacion. "
                  << "Verifique que ambos territorios sean propios "
                  << "y que haya suficientes unidades."
@@ -966,7 +955,6 @@ EstadoComando Partida::fortificar(string nombreJugador)
         }
         else
         {
-
             tablero = tableroTemporal;
             fortificacionTerminada = true;
         }
@@ -975,7 +963,6 @@ EstadoComando Partida::fortificar(string nombreJugador)
     // Avanza hasta encontrar un jugador que conserve territorios.
     do
     {
-
         turno.finalizarTurno(jugadores.size());
 
     } while (tablero.contarTerritorios(
@@ -1023,7 +1010,6 @@ EstadoComando Partida::fortificar(string nombreJugador)
 // primero van los jugadores y despues los 42 territorios del tablero
 string Partida::obtenerTextoPartida() const
 {
-
     ostringstream contenido;
 
     // la primera linea indica cuantos jugadores hay en la partida
@@ -1032,7 +1018,6 @@ string Partida::obtenerTextoPartida() const
     // conservamos el orden de los jugadores que se uso al inicializar
     for (size_t i = 0; i < jugadores.size(); i++)
     {
-
         contenido << '\n'
                   << jugadores[i].obtenerNombre() << " "
                   << jugadores[i].obtenerColor();
@@ -1050,7 +1035,6 @@ string Partida::obtenerTextoPartida() const
 // guarda el estado de jugadores y territorios en un archivo de texto
 EstadoComando Partida::guardar(string nombreArchivo) const
 {
-
     // no podemos guardar una partida que todavia no existe
     if (!inicializada)
     {
@@ -1090,7 +1074,6 @@ EstadoComando Partida::guardar(string nombreArchivo) const
 // guarda el estado de la partida en un archivo comprimido con Huffman
 EstadoComando Partida::guardarComprimido(string nombreArchivo) const
 {
-
     // no se puede guardar una partida que todavia no fue inicializada
     if (!inicializada)
     {
@@ -1111,6 +1094,404 @@ EstadoComando Partida::guardarComprimido(string nombreArchivo) const
     if (!comprimirHuffman(contenido, nombreArchivo))
     {
         return ARCHIVO_ERRONEO;
+    }
+
+    return COMANDO_CORRECTO;
+}
+
+// Este procedimiento se desarrollo con apoyo de ChatGPT para la Entrega 3
+// La solicitud fue integrar BFS con los TAD Grafo y Tablero que ya tiene RISK
+// buscando el territorio propio mas cercano y sumando las unidades enemigas
+EstadoComando Partida::costoConquista(string nombreJugador, string codigoTerritorio)
+{
+    // primero revisamos que la partida permita hacer una consulta
+    EstadoComando estado = validarEstadoJuego();
+
+    if (estado != COMANDO_CORRECTO)
+    {
+        return estado;
+    }
+
+    int posicionJugador = buscarPosicionJugador(nombreJugador);
+
+    if (posicionJugador == -1)
+    {
+        return JUGADOR_NO_VALIDO;
+    }
+
+    int destino = grafo.buscarTerritorio(codigoTerritorio);
+
+    if (destino == -1)
+    {
+        return TERRITORIO_NO_VALIDO;
+    }
+
+    string colorJugador = jugadores[posicionJugador].obtenerColor();
+    int cantidad = grafo.cantidadTerritorios();
+
+    // usamos los territorios del tablero porque ahi estan
+    // los propietarios y las unidades actuales de cada uno
+    vector<const Territorio *> datos(cantidad, nullptr);
+
+    for (int i = 0; i < cantidad; i++)
+    {
+        datos[i] = tablero.buscarTerritorio(grafo.obtenerTerritorio(i));
+
+        if (datos[i] == nullptr)
+        {
+            return SIN_RECORRIDO;
+        }
+    }
+
+    // por ahora un territorio propio no se considera una conquista
+    // esta decision se debe validar con el profesor
+    if (datos[destino]->obtenerColorPropietario() == colorJugador)
+    {
+        return DESTINO_YA_CONTROLADO;
+    }
+
+    // actualizamos el costo de cada conexion segun el jugador
+    // entrar a un territorio propio cuesta cero
+    // entrar a uno enemigo cuesta las unidades que tiene
+    for (int i = 0; i < cantidad; i++)
+    {
+        for (int j = 0; j < cantidad; j++)
+        {
+            if (!grafo.sonAdyacentes(i, j))
+            {
+                continue;
+            }
+
+            int costo = 0;
+
+            if (datos[j]->obtenerColorPropietario() != colorJugador)
+            {
+                costo = datos[j]->obtenerUnidades();
+            }
+
+            grafo.establecerCosto(i, j, costo);
+        }
+    }
+
+    // visitado evita recorrer varias veces el mismo territorio
+    // siguiente recuerda por donde debemos avanzar hacia el destino
+    vector<bool> visitado(cantidad, false);
+    vector<int> siguiente(cantidad, -1);
+    queue<int> pendientes;
+
+    pendientes.push(destino);
+    visitado[destino] = true;
+
+    int origen = -1;
+
+    // BFS empieza en el destino y revisa primero los vecinos cercanos
+    while (!pendientes.empty() && origen == -1)
+    {
+        int actual = pendientes.front();
+        pendientes.pop();
+
+        // si encontramos un territorio propio ya tenemos un origen
+        // BFS garantiza que no hay otro mas cercano en cantidad de conexiones
+        if (datos[actual]->obtenerColorPropietario() == colorJugador)
+        {
+            origen = actual;
+            break;
+        }
+
+        for (int vecino = 0; vecino < cantidad; vecino++)
+        {
+            // buscamos territorios que tengan conexion hacia el actual
+            // asi podremos reconstruir el recorrido desde origen a destino
+            if (!visitado[vecino] &&
+                grafo.sonAdyacentes(vecino, actual))
+            {
+                visitado[vecino] = true;
+                siguiente[vecino] = actual;
+                pendientes.push(vecino);
+            }
+        }
+    }
+
+    // si no encontramos territorio propio no existe un origen valido
+    if (origen == -1)
+    {
+        return SIN_RECORRIDO;
+    }
+
+    // reconstruimos el recorrido comenzando en el territorio propio
+    vector<int> camino;
+    int actual = origen;
+
+    while (actual != -1)
+    {
+        camino.push_back(actual);
+
+        if (actual == destino)
+        {
+            break;
+        }
+
+        actual = siguiente[actual];
+    }
+
+    if (camino.back() != destino)
+    {
+        return SIN_RECORRIDO;
+    }
+
+    // sumamos los costos de las conexiones que forman el recorrido
+    // cada costo corresponde a las unidades enemigas del destino del tramo
+    int costoTotal = 0;
+
+    for (int i = 1; i < (int)camino.size(); i++)
+    {
+        int costo = grafo.obtenerCosto(camino[i - 1], camino[i]);
+
+        if (costo < 0)
+        {
+            return SIN_RECORRIDO;
+        }
+
+        costoTotal += costo;
+    }
+
+    // presentamos el resultado con la estructura pedida en el enunciado
+    cout << "(Comando correcto) Para conquistar el territorio "
+         << codigoTerritorio << ", " << nombreJugador
+         << " debe atacar desde "
+         << grafo.obtenerTerritorio(origen)
+         << ", pasando por los territorios ";
+
+    for (int i = 1; i < (int)camino.size(); i++)
+    {
+        if (i > 1)
+        {
+            cout << ", ";
+        }
+
+        cout << grafo.obtenerTerritorio(camino[i]);
+    }
+
+    cout << ". Debe conquistar " << costoTotal;
+
+    // usamos singular cuando solo hay una unidad enemiga
+    if (costoTotal == 1)
+    {
+        cout << " unidad de ejercito." << endl;
+    }
+    else
+    {
+        cout << " unidades de ejercito." << endl;
+    }
+
+    return COMANDO_CORRECTO;
+}
+
+EstadoComando Partida::conquistaMasBarata(string nombreJugador)
+{
+    // comprobamos que la partida este lista y que el jugador exista
+    EstadoComando estado = validarEstadoJuego();
+
+    if (estado != COMANDO_CORRECTO)
+    {
+        return estado;
+    }
+
+    int posicionJugador = buscarPosicionJugador(nombreJugador);
+
+    if (posicionJugador == -1)
+    {
+        return JUGADOR_NO_VALIDO;
+    }
+
+    string colorJugador = jugadores[posicionJugador].obtenerColor();
+    int cantidad = grafo.cantidadTerritorios();
+    vector<const Territorio *> datos(cantidad, nullptr);
+
+    // el grafo tiene los codigos, pero Tablero tiene los propietarios y unidades
+    for (int i = 0; i < cantidad; i++)
+    {
+        datos[i] = tablero.buscarTerritorio(grafo.obtenerTerritorio(i));
+
+        if (datos[i] == nullptr)
+        {
+            return SIN_RECORRIDO;
+        }
+    }
+
+    // los costos se actualizan porque las unidades pueden cambiar durante el juego
+    for (int i = 0; i < cantidad; i++)
+    {
+        for (int j = 0; j < cantidad; j++)
+        {
+            if (!grafo.sonAdyacentes(i, j))
+            {
+                continue;
+            }
+
+            int costo = 0;
+
+            // entrar a un territorio propio cuesta cero
+            // entrar a uno enemigo cuesta las unidades que tiene
+            if (datos[j]->obtenerColorPropietario() != colorJugador)
+            {
+                costo = datos[j]->obtenerUnidades();
+            }
+
+            grafo.establecerCosto(i, j, costo);
+        }
+    }
+
+    // estructuras auxiliares para Dijkstra
+    const long long INFINITO = LLONG_MAX / 4;
+
+    vector<long long> distancia(cantidad, INFINITO);
+    vector<bool> procesado(cantidad, false);
+    vector<int> anterior(cantidad, -1);
+
+    bool tieneTerritorio = false;
+
+    // todos los territorios propios pueden servir como origen
+    for (int i = 0; i < cantidad; i++)
+    {
+        if (datos[i]->obtenerColorPropietario() == colorJugador)
+        {
+            distancia[i] = 0;
+            tieneTerritorio = true;
+        }
+    }
+
+    if (!tieneTerritorio)
+    {
+        return SIN_RECORRIDO;
+    }
+
+    // recorremos los territorios para encontrar las distancias minimas
+    for (int paso = 0; paso < cantidad; paso++)
+    {
+        int actual = -1;
+
+        // buscamos el territorio pendiente que tenga la menor distancia
+        for (int i = 0; i < cantidad; i++)
+        {
+            if (!procesado[i] && distancia[i] < INFINITO &&
+                (actual == -1 || distancia[i] < distancia[actual]))
+            {
+                actual = i;
+            }
+        }
+
+        // si no encontramos otro territorio alcanzable terminamos
+        if (actual == -1)
+        {
+            break;
+        }
+
+        procesado[actual] = true;
+
+        // intentamos mejorar las distancias de sus vecinos
+        for (int vecino = 0; vecino < cantidad; vecino++)
+        {
+            if (procesado[vecino] ||
+                !grafo.sonAdyacentes(actual, vecino))
+            {
+                continue;
+            }
+
+            int costo = grafo.obtenerCosto(actual, vecino);
+            long long nuevaDistancia = distancia[actual] + costo;
+
+            // si encontramos un camino mas barato lo guardamos
+            if (nuevaDistancia < distancia[vecino])
+            {
+                distancia[vecino] = nuevaDistancia;
+                anterior[vecino] = actual;
+            }
+        }
+    }
+
+    // buscamos el territorio enemigo con el menor costo acumulado
+    int destino = -1;
+
+    for (int i = 0; i < cantidad; i++)
+    {
+        if (datos[i]->obtenerColorPropietario() == colorJugador ||
+            distancia[i] == INFINITO)
+        {
+            continue;
+        }
+
+        if (destino == -1 || distancia[i] < distancia[destino])
+        {
+            destino = i;
+        }
+    }
+
+    if (destino == -1)
+    {
+        return SIN_RECORRIDO;
+    }
+
+    // seguimos los anteriores para reconstruir el camino desde el destino
+    vector<int> caminoInverso;
+    int actual = destino;
+
+    while (actual != -1 && (int)caminoInverso.size() < cantidad)
+    {
+        caminoInverso.push_back(actual);
+
+        if (datos[actual]->obtenerColorPropietario() == colorJugador)
+        {
+            break;
+        }
+
+        actual = anterior[actual];
+    }
+
+    // el recorrido debe terminar en un territorio del jugador
+    if (caminoInverso.empty() ||
+        datos[caminoInverso.back()]->obtenerColorPropietario() != colorJugador)
+    {
+        return SIN_RECORRIDO;
+    }
+
+    // invertimos el recorrido para mostrarlo desde el origen
+    vector<int> camino;
+
+    for (int i = (int)caminoInverso.size() - 1; i >= 0; i--)
+    {
+        camino.push_back(caminoInverso[i]);
+    }
+
+    string codigoOrigen = grafo.obtenerTerritorio(camino[0]);
+    string codigoDestino = grafo.obtenerTerritorio(destino);
+
+    cout << "(Comando correcto) La conquista mas barata es avanzar sobre el territorio "
+         << codigoDestino << " desde el territorio " << codigoOrigen
+         << ". Para conquistar el territorio " << codigoDestino
+         << ", debe atacar desde " << codigoOrigen
+         << ", pasando por los territorios ";
+
+    for (int i = 1; i < (int)camino.size(); i++)
+    {
+        if (i > 1)
+        {
+            cout << ", ";
+        }
+
+        cout << grafo.obtenerTerritorio(camino[i]);
+    }
+
+    cout << ". Debe conquistar " << distancia[destino];
+
+    // usamos singular cuando solo hay una unidad enemiga
+    if (distancia[destino] == 1)
+    {
+        cout << " unidad de ejercito." << endl;
+    }
+    else
+    {
+        cout << " unidades de ejercito." << endl;
     }
 
     return COMANDO_CORRECTO;
